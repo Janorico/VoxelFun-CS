@@ -10,6 +10,7 @@ func _ready():
 	current_viewport_size = Vector2(x, y)
 	
 	self.position = Vector2(x, y)
+	# warning-ignore:return_value_discarded
 	get_tree().get_root().connect("size_changed", self, "_on_size_changed")
 
 

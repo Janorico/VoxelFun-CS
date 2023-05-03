@@ -23,7 +23,7 @@ mesh = SubResource( 1 )
 shape = SubResource( 2 )
 
 [node name="CameraBase" type="Spatial" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.861538, 0 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.85, 0 )
 
 [node name="Camera" type="Camera" parent="CameraBase"]
 far = 500.0
@@ -41,6 +41,3 @@ script = ExtResource( 2 )
 margin_right = 40.0
 margin_bottom = 14.0
 text = "Block: "
-__meta__ = {
-"_edit_use_anchors_": false
-}
