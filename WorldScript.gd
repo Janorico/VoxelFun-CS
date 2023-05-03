@@ -4,9 +4,6 @@ var pw
 onready var player = $Player
 onready var block_outline = $BlockOutline
 
-var chunk_x = 1
-var chunk_z = 1
-
 var Chunk = load("res://Chunk.gd")
 var ProcWorld = load("res://ProcWorld.gd")
 
@@ -16,6 +13,7 @@ func _ready():
 	print("CREATING WORLD")
 	pw = ProcWorld.new()
 	add_child(pw)
+	# warning-ignore:return_value_discarded
 	self.connect("tree_exiting", self, "_on_WorldScript_tree_exiting")
 	
 	player.connect("place_block", self, "_on_Player_place_block")
@@ -24,10 +22,9 @@ func _ready():
 	player.connect("unhighlight_block", self, "_on_Player_unhighlight_block")
 	#self.connect("tree_exited", self, "_on_WorldScript_tree_exited")
 
-func _process(delta):
+func _process(_delta):
 	# Check the players chunk position and see if it has changed
 	if player != null and pw != null and pw.mutex != null:
-		var player_pos = player.translation
 		var chunk_x = floor(player.translation.x / Chunk.DIMENSION.x)
 		var chunk_z = floor(player.translation.z / Chunk.DIMENSION.z)
 		var new_chunk_pos = Vector2(chunk_x, chunk_z)
