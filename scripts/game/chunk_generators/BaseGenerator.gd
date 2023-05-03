@@ -2,7 +2,7 @@ class_name ChunkGenerator
 extends Node
 
 
-const Chunk = preload("res://Chunk.gd")
+const Chunk = preload("res://scripts/game/Chunk.gd")
 
 
 static func generate_surface(_height, _x, y, _z):

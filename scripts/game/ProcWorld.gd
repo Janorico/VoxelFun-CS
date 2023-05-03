@@ -2,7 +2,7 @@ extends Spatial
 
 var height_noise = OpenSimplexNoise.new()
 
-onready var Chunk = load("res://Chunk.gd")
+onready var Chunk = load("res://scripts/game/Chunk.gd")
 
 # Thread variables No reason to declare these on startup just do it up here
 var thread = Thread.new()

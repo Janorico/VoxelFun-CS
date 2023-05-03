@@ -5,7 +5,7 @@ onready var camera_base = $CameraBase
 onready var raycast = $CameraBase/Camera/RayCast
 onready var info_label = $CameraBase/Camera/Label
 
-var Chunk = load("res://Chunk.gd")
+var Chunk = load("res://scripts/game/Chunk.gd")
 var selected_block = Chunk.block_types.keys()[0]
 var selected_block_index = 0
 

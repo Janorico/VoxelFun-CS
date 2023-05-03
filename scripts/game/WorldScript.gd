@@ -4,8 +4,8 @@ var pw
 onready var player = $Player
 onready var block_outline = $BlockOutline
 
-var Chunk = load("res://Chunk.gd")
-var ProcWorld = load("res://ProcWorld.gd")
+var Chunk = load("res://scripts/game/Chunk.gd")
+var ProcWorld = load("res://scripts/game/ProcWorld.gd")
 
 var chunk_pos = Vector2()
 

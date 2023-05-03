@@ -1,7 +1,7 @@
 [gd_scene load_steps=7 format=2]
 
-[ext_resource path="res://WorldScript.gd" type="Script" id=1]
-[ext_resource path="res://Player.tscn" type="PackedScene" id=2]
+[ext_resource path="res://scripts/game/WorldScript.gd" type="Script" id=1]
+[ext_resource path="res://scenes/game/player.tscn" type="PackedScene" id=2]
 [ext_resource path="res://assets/OutlineMaterial.tres" type="Material" id=3]
 
 [sub_resource type="ProceduralSky" id=1]
