@@ -1,5 +1,4 @@
 extends Spatial
-tool
 
 var pw
 onready var player = $Player
