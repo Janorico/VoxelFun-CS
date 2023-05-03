@@ -9,18 +9,23 @@ var ProcWorld = load("res://ProcWorld.gd")
 
 var chunk_pos = Vector2()
 
+
 func _ready():
 	print("CREATING WORLD")
 	pw = ProcWorld.new()
 	add_child(pw)
 	# warning-ignore:return_value_discarded
-	self.connect("tree_exiting", self, "_on_WorldScript_tree_exiting")
+	self.connect("tree_exiting", self, "_on_tree_exiting")
 	
-	player.connect("place_block", self, "_on_Player_place_block")
-	player.connect("destroy_block", self, "_on_Player_destroy_block")
-	player.connect("highlight_block", self, "_on_Player_highlight_block")
-	player.connect("unhighlight_block", self, "_on_Player_unhighlight_block")
-	#self.connect("tree_exited", self, "_on_WorldScript_tree_exited")
+	# warning-ignore:return_value_discarded
+	player.connect("place_block", self, "_on_player_place_block")
+	# warning-ignore:return_value_discarded
+	player.connect("destroy_block", self, "_on_player_destroy_block")
+	# warning-ignore:return_value_discarded
+	player.connect("highlight_block", self, "_on_player_highlight_block")
+	# warning-ignore:return_value_discarded
+	player.connect("unhighlight_block", self, "_on_player_unhighlight_block")
+
 
 func _process(_delta):
 	# Check the players chunk position and see if it has changed
@@ -35,7 +40,8 @@ func _process(_delta):
 			#pw.update_player_pos(chunk_pos)
 			pw.call_deferred("update_player_pos", chunk_pos)
 
-func _on_WorldScript_tree_exiting():
+
+func _on_tree_exiting():
 	print("Kill map loading thread")
 	if pw != null:
 		pw.call_deferred("kill_thread")
@@ -43,7 +49,8 @@ func _on_WorldScript_tree_exiting():
 		#pw.thread.wait_to_finish()
 	print("Finished")
 
-func _on_Player_destroy_block(pos, norm):
+
+func _on_player_destroy_block(pos, norm):
 	# Take a half step into the block
 	pos -= norm * 0.5
 	
@@ -58,7 +65,8 @@ func _on_Player_destroy_block(pos, norm):
 	#pw.change_block(cx, cz, bx, by, bz, "Air")
 	pw.call_deferred("change_block", cx, cz, bx, by, bz, "Air")
 
-func _on_Player_place_block(pos, norm, t):
+
+func _on_player_place_block(pos, norm, t):
 	# Take a half step out of the block
 	pos += norm * 0.5
 	
@@ -73,7 +81,8 @@ func _on_Player_place_block(pos, norm, t):
 	#pw.change_block(cx, cz, bx, by, bz, t)
 	pw.call_deferred("change_block", cx, cz, bx, by, bz, t)
 
-func _on_Player_highlight_block(pos, norm):
+
+func _on_player_highlight_block(pos, norm):
 	block_outline.visible = true
 	
 	# Take a half step into the block
@@ -85,5 +94,6 @@ func _on_Player_highlight_block(pos, norm):
 	
 	block_outline.translation = Vector3(bx, by, bz)
 
-func _on_Player_unhighlight_block():
+
+func _on_player_unhighlight_block():
 	block_outline.visible = false
