@@ -21,7 +21,7 @@ _global_script_class_icons={
 [application]
 
 config/name="VoxelFun"
-run/main_scene="res://Spatial.tscn"
+run/main_scene="res://scenes/main.tscn"
 config/use_custom_user_dir=true
 config/custom_user_dir_name="JanoSemi/VoxelFun"
 config/icon="res://icon.png"
