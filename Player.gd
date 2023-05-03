@@ -24,9 +24,10 @@ signal destroy_block(pos, norm)
 signal highlight_block(pos, norm)
 signal unhighlight_block()
 
-# Called when the node enters the scene tree for the first time.
+
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+
 
 func _input(event):
 	# Mouse movement
@@ -39,7 +40,8 @@ func _input(event):
 				camera.rotate_x(deg2rad(-x_delta))
 				camera_x_rotation += x_delta
 
-func _physics_process(delta):	
+
+func _physics_process(delta):
 	var cx = floor(self.translation.x / Chunk.DIMENSION.x)
 	var cz = floor(self.translation.z / Chunk.DIMENSION.z)
 	var px = self.translation.x - cx * Chunk.DIMENSION.x
@@ -95,9 +97,11 @@ func _physics_process(delta):
 		velocity.y -= gravity * delta
 		velocity = move_and_slide(velocity, Vector3.UP)
 
-func _process(delta):
+
+func _process(_delta):
 	if Input.is_action_just_pressed("pause"):
 		toggle_pause()
+
 
 func toggle_pause():
 	paused = !paused
