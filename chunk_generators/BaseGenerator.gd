@@ -1,13 +1,16 @@
-extends Node
 class_name ChunkGenerator
+extends Node
+
 
 const Chunk = preload("res://Chunk.gd")
 
-static func generate_surface(height, x, y, z):
+
+static func generate_surface(_height, _x, y, _z):
 	if y == 0:
 		return "Stone"
 	else:
 		return "Air"
 
-static func generate_details(c, rng, ground_height):
+
+static func generate_details(_c, _rng, _ground_height):
 	return
