@@ -1,5 +1,6 @@
 extends ChunkGenerator
 
+
 static func generate_surface(height, x, y, z):
 	var type
 	if y < height - 10 or y == 0:
@@ -10,13 +11,13 @@ static func generate_surface(height, x, y, z):
 		type = "Air"
 	return type
 
+
 static func generate_details(c, rng, ground_height):
 	# Now generate cactus
 	var cactus_width = 2
 	for n_cactus in range(0, rng.randi_range(0, 3)):
 		var x = rng.randi_range(cactus_width, c.DIMENSION.x - cactus_width - 1)
 		var z = rng.randi_range(cactus_width, c.DIMENSION.z - cactus_width - 1)
-
 		# Place a cactus at this position up to some height
 		var cactus_height = rng.randi_range(5, 7)
 		for i in range(0, cactus_height):
