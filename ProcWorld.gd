@@ -1,4 +1,5 @@
 extends Spatial
+
 var height_noise = OpenSimplexNoise.new()
 
 onready var Chunk = load("res://Chunk.gd")
@@ -9,7 +10,7 @@ var mutex = Mutex.new()
 var semaphore = Semaphore.new()
 var bKill_thread = false
 
-#Use this when adding/removing from the chunk array/dict
+# Use this when adding/removing from the chunk array/dict
 var chunk_mutex = Mutex.new()
 
 var _new_chunk_pos = Vector2()
@@ -22,12 +23,13 @@ var _kill_thread = false
 const load_radius = 5
 var current_load_radius = 0
 
-func _ready():	
+
+func _ready():
 	thread.start(self, "_thread_gen")
 	height_noise.period = 100
 
 
-func _thread_gen(userdata):
+func _thread_gen(_userdata):
 	var i = 0
 	# Center map generation on the player
 	while(!bKill_thread):
@@ -78,8 +80,10 @@ func _thread_gen(userdata):
 					if delta_pos.y < load_radius:
 						_last_chunk = _load_chunk(_last_chunk.x, _last_chunk.y + 1)
 
+
 func update_player_pos(new_pos):
 	_new_chunk_pos = new_pos
+
 
 func change_block(cx, cz, bx, by, bz, t):
 	var c = _loaded_chunks[Vector2(cx, cz)]
@@ -87,6 +91,7 @@ func change_block(cx, cz, bx, by, bz, t):
 		print("Changed block at %d %d %d in chunk %d, %d" % [bx, by, bz, cx, cz])
 		c._block_data[bx][by][bz].create(t)
 		_update_chunk(cx, cz)
+
 
 func _load_chunk(cx, cz):
 	var c_pos = Vector2(cx, cz)
@@ -100,16 +105,18 @@ func _load_chunk(cx, cz):
 		chunk_mutex.unlock()
 	return c_pos
 
+
 func _update_chunk(cx, cz):
 	var c_pos = Vector2(cx, cz)
 	if _loaded_chunks.has(c_pos):
 		var c = _loaded_chunks[c_pos]
 		c.update()
 	return c_pos
-	
+
+
 # Detects and removes chunks all in one go without consulting the main thread.
 func enforce_render_distance(current_chunk_pos):
-		#Checks and deletes the offending chunks all in one go 
+		# Checks and deletes the offending chunks all in one go 
 	for v in _loaded_chunks.keys():
 		# Anywhere you directly interface with chunks outside of unloading
 		if abs(v.x - current_chunk_pos.x) > load_radius or abs(v.y - current_chunk_pos.y) > load_radius:
@@ -129,6 +136,7 @@ func _unload_chunk(cx, cz):
 		# Leaving this here because it is funny as hell
 		# Force it to just fucking chill after holy shit
 		# OS.delay_msec(50)
+
 
 func kill_thread():
 	bKill_thread = true
