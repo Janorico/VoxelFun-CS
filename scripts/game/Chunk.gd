@@ -63,13 +63,16 @@ var st = SurfaceTool.new()
 # Used for collision
 var cst = SurfaceTool.new()
 
+
 func _ready():
 	mat.albedo_texture.set_flags(2)
+
 
 func _set_block_data(x, y, z, b, overwrite = true):
 	if x >= 0 and x < DIMENSION.x and y >= 0 and y < DIMENSION.y and z >= 0 and z < DIMENSION.z:
 		if overwrite or _block_data[x][y][z].type == "Air":
 			_block_data[x][y][z] = b
+
 
 func generate(w, cx, cz):
 	world = w
@@ -100,6 +103,7 @@ func generate(w, cx, cz):
 				_set_block_data(x, y, z, b)
 	
 	generator.generate_details(self, rng, ground_height)
+
 
 func update():
 	var mesh = Mesh.new()
@@ -151,6 +155,7 @@ func update():
 	add_child(cmesh_instance)
 	cmesh_instance.create_trimesh_collision()
 
+
 func _create_block(check, x, y, z, no_collision):
 	var block = _block_data[x][y][z].type
 	if block_types[block]["Tags"].has(Tags.Flat):
@@ -171,6 +176,7 @@ func _create_block(check, x, y, z, no_collision):
 			create_face(BACK, x, y, z, block_types[block][Side.back], no_collision)
 		if check[5]:
 			create_face(FRONT, x, y, z, block_types[block][Side.front], no_collision)
+
 
 func create_face(i, x, y, z, texture_atlas_offset, no_collision):
 	# Two triangles
@@ -199,6 +205,7 @@ func create_face(i, x, y, z, texture_atlas_offset, no_collision):
 		cst.add_triangle_fan(([a, c, d]), ([uv_a, uv_c, uv_d]))
 	
 
+
 func check_transparent_neighbours(x, y, z):
 	var has_top = is_block_transparent(x, y + 1, z)
 	var has_bottom = is_block_transparent(x, y - 1, z)
@@ -209,12 +216,14 @@ func check_transparent_neighbours(x, y, z):
 	
 	return [has_top, has_bottom, has_left, has_right, has_front, has_back]
 
+
 func is_block_transparent(x, y, z):
 	if x < 0 or x >= DIMENSION.x or z < 0 or z >= DIMENSION.z or y < 0 or y >= DIMENSION.y:
 		# For out of bounds lets still show the face
 		return true
 	else:
 		return _block_data[x][y][z].transparent
+
 
 enum Side {
 	top,
@@ -305,7 +314,7 @@ const block_types = {
 
 class BlockData:
 	var transparent = false
-	var type =  "Dirt"
+	var type = "Dirt"
 	func create(t):
 		type = t
 		transparent = block_types[t]["Tags"].has(Tags.Transparent)
