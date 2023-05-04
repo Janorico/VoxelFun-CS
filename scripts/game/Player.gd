@@ -4,6 +4,9 @@ onready var camera = $CameraBase/Camera
 onready var camera_base = $CameraBase
 onready var raycast = $CameraBase/Camera/RayCast
 onready var info_label = $CameraBase/Camera/Label
+# Reset values
+onready var initial_position: Vector3 = translation
+onready var initial_rotation: Vector3 = rotation_degrees
 
 var Chunk = load("res://scripts/game/Chunk.gd")
 var selected_block = Chunk.block_types.keys()[0]
@@ -96,6 +99,10 @@ func _physics_process(delta):
 			velocity.z = direction.z * SPEED
 		velocity.y -= gravity * delta
 		velocity = move_and_slide(velocity, Vector3.UP)
+		if Input.is_action_just_released("reset_player"):
+			translation = initial_position
+			rotation_degrees = initial_rotation
+			velocity = Vector3.ZERO
 
 
 func _process(_delta):
