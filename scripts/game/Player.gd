@@ -1,3 +1,4 @@
+class_name Player
 extends KinematicBody
 
 onready var camera = $CameraBase/Camera
@@ -103,16 +104,3 @@ func _physics_process(delta):
 			translation = initial_position
 			rotation_degrees = initial_rotation
 			velocity = Vector3.ZERO
-
-
-func _process(_delta):
-	if Input.is_action_just_released("pause"):
-		toggle_pause()
-
-
-func toggle_pause():
-	paused = !paused
-	if paused:
-		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
-	else:
-		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
