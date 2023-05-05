@@ -30,7 +30,6 @@ config/name="VoxelFun"
 run/main_scene="res://scenes/game/main.tscn"
 config/use_custom_user_dir=true
 config/custom_user_dir_name="JanoSemi/VoxelFun"
-config/icon="res://icon.png"
 
 [importer_defaults]
 
