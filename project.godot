@@ -30,7 +30,10 @@ config/name="VoxelFun"
 run/main_scene="res://scenes/game/main.tscn"
 config/use_custom_user_dir=true
 config/custom_user_dir_name="JanoSemi/VoxelFun"
+boot_splash/image="res://assets/logo/voxelfun_logo.png"
 boot_splash/bg_color=Color( 0, 0, 0, 1 )
+config/icon="res://assets/logo/voxelfun_logo.png"
+config/windows_native_icon="res://assets/logo/voxelfun_logo.ico"
 
 [importer_defaults]
 
