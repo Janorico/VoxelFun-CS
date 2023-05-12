@@ -96,7 +96,7 @@ func _physics_process(delta):
 			if Input.is_action_pressed("right"):
 				direction += camera_base_basis.x
 			
-			# Process inputs (only in the xz plane
+			# Process inputs (only in the xz plane)
 			var speed_input = SPEED * power_multipler
 			velocity.x = direction.x * speed_input
 			velocity.z = direction.z * speed_input
