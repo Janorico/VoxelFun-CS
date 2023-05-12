@@ -38,6 +38,7 @@ config/windows_native_icon="res://assets/logo/voxelfun_logo.ico"
 [display]
 
 window/size/height=576
+window/size/fullscreen=true
 
 [importer_defaults]
 
