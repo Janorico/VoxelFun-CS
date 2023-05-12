@@ -77,8 +77,9 @@ func _physics_process(delta):
 				selected_block_index -= Chunk.block_types.keys().size()
 		selected_block = Chunk.block_types.keys()[selected_block_index]
 		
+		var power_multipler = (Input.get_action_strength("run") + 1)
 		if Input.is_action_just_pressed("jump") and is_on_floor():
-			velocity.y = jump_vel
+			velocity.y = jump_vel * power_multipler
 		else:
 			var camera_base_basis = self.get_global_transform().basis
 			
@@ -96,8 +97,9 @@ func _physics_process(delta):
 				direction += camera_base_basis.x
 			
 			# Process inputs (only in the xz plane
-			velocity.x = direction.x * SPEED
-			velocity.z = direction.z * SPEED
+			var speed_input = SPEED * power_multipler
+			velocity.x = direction.x * speed_input
+			velocity.z = direction.z * speed_input
 		velocity.y -= gravity * delta
 		velocity = move_and_slide(velocity, Vector3.UP)
 		if Input.is_action_just_released("reset_player"):
