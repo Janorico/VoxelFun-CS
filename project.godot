@@ -30,6 +30,7 @@ config/name="VoxelFun"
 run/main_scene="res://scenes/game/main.tscn"
 config/use_custom_user_dir=true
 config/custom_user_dir_name="JanoSemi/VoxelFun"
+boot_splash/bg_color=Color( 0, 0, 0, 1 )
 
 [importer_defaults]
 
@@ -121,4 +122,5 @@ reset_player={
 
 quality/driver/driver_name="GLES2"
 vram_compression/import_etc=true
+environment/default_clear_color=Color( 0, 0, 0, 1 )
 environment/default_environment="res://default_env.tres"
