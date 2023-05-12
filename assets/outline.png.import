@@ -4,15 +4,16 @@ importer="texture"
 type="StreamTexture"
 path.s3tc="res://.import/outline.png-a9a44da59efb1617f189345f3a565df2.s3tc.stex"
 path.etc2="res://.import/outline.png-a9a44da59efb1617f189345f3a565df2.etc2.stex"
+path.etc="res://.import/outline.png-a9a44da59efb1617f189345f3a565df2.etc.stex"
 metadata={
-"imported_formats": [ "s3tc", "etc2" ],
+"imported_formats": [ "s3tc", "etc2", "etc" ],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/outline.png"
-dest_files=[ "res://.import/outline.png-a9a44da59efb1617f189345f3a565df2.s3tc.stex", "res://.import/outline.png-a9a44da59efb1617f189345f3a565df2.etc2.stex" ]
+dest_files=[ "res://.import/outline.png-a9a44da59efb1617f189345f3a565df2.s3tc.stex", "res://.import/outline.png-a9a44da59efb1617f189345f3a565df2.etc2.stex", "res://.import/outline.png-a9a44da59efb1617f189345f3a565df2.etc.stex" ]
 
 [params]
 
