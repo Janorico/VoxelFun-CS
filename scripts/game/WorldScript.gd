@@ -11,6 +11,10 @@ var chunk_pos = Vector2()
 
 
 func _ready():
+	if OS.is_debug_build():
+		OS.window_fullscreen = false
+		OS.window_size = Vector2(ProjectSettings.get("display/window/size/width"), ProjectSettings.get("display/window/size/height"))
+		OS.center_window()
 	print("CREATING WORLD")
 	pw = ProcWorld.new()
 	add_child(pw)
