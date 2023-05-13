@@ -43,9 +43,21 @@ func _process(_delta):
 			chunk_pos = new_chunk_pos
 			#pw.update_player_pos(chunk_pos)
 			pw.call_deferred("update_player_pos", chunk_pos)
+	# Save world on CTRL+S pressed
+	if Input.is_action_just_released("save"):
+		save_world()
+
+
+func save_world():
+	print("Saving world")
+	var file = File.new()
+	file.open(ProcWorld.WORLD_PATH, File.WRITE)
+	file.store_var(pw.changed_blocks)
+	file.close()
 
 
 func _on_tree_exiting():
+	save_world()
 	print("Kill map loading thread")
 	if pw != null:
 		pw.call_deferred("kill_thread")

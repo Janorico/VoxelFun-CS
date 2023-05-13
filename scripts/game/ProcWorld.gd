@@ -4,6 +4,10 @@ var height_noise = OpenSimplexNoise.new()
 
 onready var Chunk = load("res://scripts/game/Chunk.gd")
 
+# Saving variables
+const WORLD_PATH = "user://world"
+var changed_blocks = {}
+
 # Thread variables No reason to declare these on startup just do it up here
 var thread = Thread.new()
 var mutex = Mutex.new()
@@ -25,6 +29,13 @@ var current_load_radius = 0
 
 
 func _ready():
+	var file = File.new()
+	if file.file_exists(WORLD_PATH):
+		file.open(WORLD_PATH, File.READ)
+		var data = file.get_var()
+		file.close()
+		if typeof(data) == TYPE_DICTIONARY:
+			changed_blocks = data
 	thread.start(self, "_thread_gen")
 	height_noise.period = 100
 
@@ -91,6 +102,7 @@ func change_block(cx, cz, bx, by, bz, t):
 		print("Changed block at %d %d %d in chunk %d, %d" % [bx, by, bz, cx, cz])
 		c._block_data[bx][by][bz].create(t)
 		_update_chunk(cx, cz)
+		changed_blocks["%d,%d,%d,%d,%d" % [bx, by, bz, cx, cz]] = t
 
 
 func _load_chunk(cx, cz):
