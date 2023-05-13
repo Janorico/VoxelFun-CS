@@ -85,6 +85,61 @@ margin_right = 64.0
 margin_bottom = 44.0
 text = "Quit"
 
+[node name="AboutDialog" type="AcceptDialog" parent="."]
+margin_right = 83.0
+margin_bottom = 58.0
+
+[node name="TabContainer" type="TabContainer" parent="AboutDialog"]
+margin_right = 8.0
+margin_bottom = 36.0
+use_hidden_tabs_for_min_size = true
+
+[node name="About" type="RichTextLabel" parent="AboutDialog/TabContainer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 4.0
+margin_top = 32.0
+margin_right = -4.0
+margin_bottom = -4.0
+bbcode_enabled = true
+bbcode_text = "[center][b]VoxelFun[/b][/center]
+[center][i]Simple, fun, and open-source voxel game.[/i][/center]
+
+Authors: Samuel Weywara, Janosch Lion
+Repository: [url]https://github.com/JanoSemi/VoxelFun[/url]
+Original Project: [url]https://github.com/xen-42/Minecraft-Clone[/url]
+Email: [url=mailto:janorico@posteo.de]janorico@posteo.de[/url]"
+text = "VoxelFun
+Simple, fun, and open-source voxel game.
+
+Authors: Samuel Weywara, Janosch Lion
+Repository: https://github.com/JanoSemi/VoxelFun
+Original Project: https://github.com/xen-42/Minecraft-Clone
+Email: janorico@posteo.de"
+
+[node name="License" type="Label" parent="AboutDialog/TabContainer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 4.0
+margin_top = 32.0
+margin_right = -4.0
+margin_bottom = -4.0
+text = "Simple, fun, and open-source voxel game.
+Copyright (C) 2023 Samuel Weywara, Janosch Lion
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/>."
+
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 anims/hide = SubResource( 1 )
 anims/show = SubResource( 2 )

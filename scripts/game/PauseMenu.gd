@@ -32,3 +32,8 @@ func resume():
 
 func _quit():
 	get_tree().quit(0)
+
+
+func _on_rich_text_label_meta_clicked(meta):
+	# warning-ignore:return_value_discarded
+	OS.shell_open(meta)
