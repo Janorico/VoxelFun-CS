@@ -1,5 +1,6 @@
 extends ColorRect
 
+
 export var player_path: NodePath
 onready var player: Player = get_node(player_path)
 onready var animation_player: AnimationPlayer = $AnimationPlayer
