@@ -40,6 +40,10 @@ config/windows_native_icon="res://assets/logo/voxelfun_logo.ico"
 window/size/height=576
 window/size/fullscreen=true
 
+[gui]
+
+theme/custom="res://theme.tres"
+
 [importer_defaults]
 
 texture={

@@ -117,26 +117,26 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer"]
-margin_left = 480.0
-margin_top = 254.0
-margin_right = 544.0
-margin_bottom = 322.0
+margin_left = 476.0
+margin_top = 242.0
+margin_right = 548.0
+margin_bottom = 334.0
 
 [node name="ResumeButton" type="Button" parent="CenterContainer/VBoxContainer"]
-margin_right = 64.0
-margin_bottom = 20.0
+margin_right = 72.0
+margin_bottom = 28.0
 text = "Resume"
 
 [node name="AboutButton" type="Button" parent="CenterContainer/VBoxContainer"]
-margin_top = 24.0
-margin_right = 64.0
-margin_bottom = 44.0
+margin_top = 32.0
+margin_right = 72.0
+margin_bottom = 60.0
 text = "About"
 
 [node name="QuitButton" type="Button" parent="CenterContainer/VBoxContainer"]
-margin_top = 48.0
-margin_right = 64.0
-margin_bottom = 68.0
+margin_top = 64.0
+margin_right = 72.0
+margin_bottom = 92.0
 text = "Quit"
 
 [node name="AboutDialog" type="AcceptDialog" parent="."]
@@ -144,15 +144,17 @@ margin_right = 83.0
 margin_bottom = 58.0
 
 [node name="TabContainer" type="TabContainer" parent="AboutDialog"]
-margin_right = 8.0
-margin_bottom = 36.0
+margin_left = 8.0
+margin_top = 8.0
+margin_right = 716.0
+margin_bottom = 424.0
 use_hidden_tabs_for_min_size = true
 
 [node name="About" type="RichTextLabel" parent="AboutDialog/TabContainer"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 4.0
-margin_top = 32.0
+margin_top = 40.0
 margin_right = -4.0
 margin_bottom = -4.0
 bbcode_enabled = true
@@ -170,6 +172,17 @@ Authors: Samuel Weywara, Janosch Lion
 Repository: https://github.com/JanoSemi/VoxelFun
 Original Project: https://github.com/xen-42/Minecraft-Clone
 Email: janorico@posteo.de"
+
+[node name="Sources" type="RichTextLabel" parent="AboutDialog/TabContainer"]
+margin_left = -8.0
+margin_top = -8.0
+margin_right = 32.0
+margin_bottom = 32.0
+bbcode_enabled = true
+bbcode_text = "[center][b]VoxelFun Sources[/b][/center]
+[url=https://www.jetbrains.com/lp/mono/]JetBrains Mono v2.304[/url]"
+text = "VoxelFun Sources
+JetBrains Mono v2.304"
 
 [node name="License" type="Label" parent="AboutDialog/TabContainer"]
 anchor_right = 1.0
@@ -202,3 +215,4 @@ anims/show = SubResource( 2 )
 [connection signal="pressed" from="CenterContainer/VBoxContainer/AboutButton" to="AboutDialog" method="popup_centered"]
 [connection signal="pressed" from="CenterContainer/VBoxContainer/QuitButton" to="." method="_quit"]
 [connection signal="meta_clicked" from="AboutDialog/TabContainer/About" to="." method="_on_rich_text_label_meta_clicked"]
+[connection signal="meta_clicked" from="AboutDialog/TabContainer/Sources" to="." method="_on_rich_text_label_meta_clicked"]
