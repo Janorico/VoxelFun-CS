@@ -162,15 +162,15 @@ bbcode_text = "[center][b]VoxelFun[/b][/center]
 [center][i]Simple, fun, and open-source voxel game.[/i][/center]
 
 Authors: Samuel Weywara, Janosch Lion
+Thanks to [url=https://github.com/xen-42]xen-42[/url] for the [url=https://github.com/xen-42/Minecraft-Clone]original project[/url].
 Repository: [url]https://github.com/JanoSemi/VoxelFun[/url]
-Original Project: [url]https://github.com/xen-42/Minecraft-Clone[/url]
 Email: [url=mailto:janorico@posteo.de]janorico@posteo.de[/url]"
 text = "VoxelFun
 Simple, fun, and open-source voxel game.
 
 Authors: Samuel Weywara, Janosch Lion
+Thanks to xen-42 for the original project.
 Repository: https://github.com/JanoSemi/VoxelFun
-Original Project: https://github.com/xen-42/Minecraft-Clone
 Email: janorico@posteo.de"
 
 [node name="Sources" type="RichTextLabel" parent="AboutDialog/TabContainer"]
