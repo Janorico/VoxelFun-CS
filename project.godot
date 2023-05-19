@@ -27,7 +27,7 @@ _global_script_class_icons={
 [application]
 
 config/name="VoxelFun"
-run/main_scene="res://scenes/game/main.tscn"
+run/main_scene="res://scenes/startup.tscn"
 config/use_custom_user_dir=true
 config/custom_user_dir_name="JanoSemi/VoxelFun"
 boot_splash/image="res://assets/logo/voxelfun_logo.png"

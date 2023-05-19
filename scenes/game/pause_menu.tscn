@@ -181,9 +181,11 @@ margin_right = 32.0
 margin_bottom = 32.0
 bbcode_enabled = true
 bbcode_text = "[center][b]VoxelFun Sources[/b][/center]
-[url=https://www.jetbrains.com/lp/mono/]JetBrains Mono v2.304[/url]"
+[url=https://www.jetbrains.com/lp/mono/]JetBrains Mono v2.304[/url]
+[url=https://icons8.com/icon/13805/world-map]World Map[/url] icon by [url=https://icons8.com]Icons8[/url]"
 text = "VoxelFun Sources
-JetBrains Mono v2.304"
+JetBrains Mono v2.304
+World Map icon by Icons8"
 
 [node name="License" type="Label" parent="AboutDialog/TabContainer"]
 visible = false

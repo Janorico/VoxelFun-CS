@@ -19,3 +19,4 @@
 ## Sources
 
 * [JetBrains Mono v2.304](https://www.jetbrains.com/lp/mono/)
+* [World Map](https://icons8.com/icon/13805/world-map) icon by [Icons8](https://icons8.com)

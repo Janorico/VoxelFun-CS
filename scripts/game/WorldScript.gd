@@ -1,5 +1,6 @@
 extends Spatial
 
+var initial_world_path: String = "user://worlds/default"
 var pw
 onready var player = $Player
 onready var block_outline = $BlockOutline
@@ -11,12 +12,8 @@ var chunk_pos = Vector2()
 
 
 func _ready():
-	if OS.is_debug_build():
-		OS.window_fullscreen = false
-		OS.window_size = Vector2(ProjectSettings.get("display/window/size/width"), ProjectSettings.get("display/window/size/height"))
-		OS.center_window()
 	print("CREATING WORLD")
-	pw = ProcWorld.new()
+	pw = ProcWorld.new(initial_world_path)
 	add_child(pw)
 	# warning-ignore:return_value_discarded
 	self.connect("tree_exiting", self, "_on_tree_exiting")
@@ -45,19 +42,11 @@ func _process(_delta):
 			pw.call_deferred("update_player_pos", chunk_pos)
 	# Save world on CTRL+S pressed
 	if Input.is_action_just_released("save"):
-		save_world()
-
-
-func save_world():
-	print("Saving world")
-	var file = File.new()
-	file.open(ProcWorld.WORLD_PATH, File.WRITE)
-	file.store_var(pw.changed_blocks)
-	file.close()
+		pw.save_world()
 
 
 func _on_tree_exiting():
-	save_world()
+	pw.save_world()
 	print("Kill map loading thread")
 	if pw != null:
 		pw.call_deferred("kill_thread")
