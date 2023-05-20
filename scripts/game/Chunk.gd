@@ -101,8 +101,8 @@ func generate(w, cx, cz):
 				ground_height[x][z] = int(h_noise * (Gen_Height - 1) + 1) + Block_offset
 				# Load data if exist
 				var key = "%d,%d,%d,%d,%d" % [x, y, z, cx, cz]
-				if world.changed_blocks.has(key):
-					b.create(world.changed_blocks[key])
+				if world.world_data.has(key):
+					b.create(world.world_data[key])
 				else:
 					b.create(generator.generate_surface(ground_height[x][z], x, y, z))
 				_set_block_data(x, y, z, b)

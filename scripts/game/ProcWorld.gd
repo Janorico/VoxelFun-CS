@@ -6,7 +6,7 @@ onready var Chunk = load("res://scripts/game/Chunk.gd")
 
 # Saving variables
 var world_path: String
-var changed_blocks = {}
+var world_data = {}
 
 # Thread variables No reason to declare these on startup just do it up here
 var thread = Thread.new()
@@ -39,7 +39,7 @@ func _ready():
 		var data = file.get_var()
 		file.close()
 		if typeof(data) == TYPE_DICTIONARY:
-			changed_blocks = data
+			world_data = data
 	thread.start(self, "_thread_gen")
 	height_noise.period = 100
 
@@ -48,7 +48,7 @@ func save_world():
 	print("Saving world")
 	var file = File.new()
 	file.open(world_path, File.WRITE)
-	file.store_var(changed_blocks)
+	file.store_var(world_data)
 	file.close()
 
 
@@ -114,7 +114,7 @@ func change_block(cx, cz, bx, by, bz, t):
 		print("Changed block at %d %d %d in chunk %d, %d" % [bx, by, bz, cx, cz])
 		c._block_data[bx][by][bz].create(t)
 		_update_chunk(cx, cz)
-		changed_blocks["%d,%d,%d,%d,%d" % [bx, by, bz, cx, cz]] = t
+		world_data["%d,%d,%d,%d,%d" % [bx, by, bz, cx, cz]] = t
 
 
 func _load_chunk(cx, cz):
