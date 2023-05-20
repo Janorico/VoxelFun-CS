@@ -5,7 +5,8 @@ const MAIN_SCENE: PackedScene = preload("res://scenes/game/main.tscn")
 const WORLDS_DIR: String = "user://worlds/"
 onready var worlds_list: ItemList = $MarginContainer/Page1/WorldsList
 onready var message_label: Label = $Message/Label
-onready var new_world_name: LineEdit = $NewWorldDialog/NameLineEdit
+onready var new_world_name: LineEdit = $NewWorldDialog/GridContainer/NameLineEdit
+onready var new_world_type: OptionButton = $NewWorldDialog/GridContainer/TypeOptionButton
 onready var delete_confirmation: ConfirmationDialog = $DeleteConfirmation
 onready var animation_player: AnimationPlayer = $AnimationPlayer
 export var map_icon: Texture = preload("res://assets/icons/icons8-world-map-96.png")
@@ -46,9 +47,11 @@ func get_dir() -> Directory:
 	return dir
 
 
-func open_world(world: String):
+func open_world(world: String, type):
 	var main = MAIN_SCENE.instance()
-	main.get_node("Game").initial_world_path = get_world_path(world)
+	var game_child = main.get_node("Game")
+	game_child.initial_world_path = get_world_path(world)
+	game_child.initial_world_type = type
 	get_parent().add_child(main)
 	queue_free()
 	get_tree().current_scene = main
@@ -65,16 +68,17 @@ func show_message(msg: String):
 
 func _on_new_world_dialog_confirmed():
 	var wname = new_world_name.text
+	var wtype = new_world_type.text
 	if wname == "":
 		show_message("Name is empty!")
 	else:
-		open_world(wname)
+		open_world(wname, wtype)
 
 
 func _on_open_button_pressed():
 	var selected_items = worlds_list.get_selected_items()
 	if selected_items.size() > 0:
-		open_world(worlds[selected_items[0]])
+		open_world(worlds[selected_items[0]], null)
 	else:
 		show_message("No selection!")
 

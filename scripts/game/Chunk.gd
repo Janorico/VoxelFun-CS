@@ -15,7 +15,7 @@ var rng = RandomNumberGenerator.new()
 # Make this load from a file
 const texture_atlas_size = Vector2(8, 4)
 
-var generator = load("res://scripts/game/chunk_generators/ForestGenerator.gd")
+var generator
 
 const v = [
 	Vector3(0, 0, 0), #0
@@ -62,6 +62,10 @@ var st = SurfaceTool.new()
 
 # Used for collision
 var cst = SurfaceTool.new()
+
+
+func _init(world_type: String):
+	generator = load("res://scripts/game/chunk_generators/%sGenerator.gd" % world_type)
 
 
 func _ready():

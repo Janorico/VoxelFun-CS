@@ -1,6 +1,7 @@
 extends Spatial
 
 var initial_world_path: String = "user://worlds/default"
+var initial_world_type = null
 var pw
 onready var player = $Player
 onready var block_outline = $BlockOutline
@@ -14,6 +15,8 @@ var chunk_pos = Vector2()
 func _ready():
 	print("CREATING WORLD")
 	pw = ProcWorld.new(initial_world_path)
+	if initial_world_type != null:
+		pw.world_data["type"] = initial_world_type
 	add_child(pw)
 	# warning-ignore:return_value_discarded
 	self.connect("tree_exiting", self, "_on_tree_exiting")

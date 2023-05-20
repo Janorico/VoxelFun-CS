@@ -219,16 +219,44 @@ texture_pressed = ExtResource( 4 )
 texture_hover = ExtResource( 3 )
 
 [node name="NewWorldDialog" type="ConfirmationDialog" parent="."]
-margin_right = 356.0
-margin_bottom = 74.0
+margin_right = 280.0
+margin_bottom = 116.0
 window_title = "New World"
 
-[node name="NameLineEdit" type="LineEdit" parent="NewWorldDialog"]
+[node name="GridContainer" type="GridContainer" parent="NewWorldDialog"]
 margin_left = 8.0
 margin_top = 8.0
-margin_right = 348.0
-margin_bottom = 40.0
+margin_right = 297.0
+margin_bottom = 72.0
+columns = 2
+
+[node name="NameLabel" type="Label" parent="NewWorldDialog/GridContainer"]
+margin_top = 5.0
+margin_right = 60.0
+margin_bottom = 27.0
+text = "Name: "
+
+[node name="NameLineEdit" type="LineEdit" parent="NewWorldDialog/GridContainer"]
+margin_left = 64.0
+margin_right = 289.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 225, 0 )
 placeholder_text = "Type a cool name..."
+
+[node name="TypeLabel" type="Label" parent="NewWorldDialog/GridContainer"]
+margin_top = 39.0
+margin_right = 60.0
+margin_bottom = 61.0
+text = "Type: "
+
+[node name="TypeOptionButton" type="OptionButton" parent="NewWorldDialog/GridContainer"]
+margin_left = 64.0
+margin_top = 36.0
+margin_right = 289.0
+margin_bottom = 64.0
+text = "Forest"
+items = [ "Forest", null, false, 0, null, "Desert", null, false, 1, null, "Boreal", null, false, 2, null ]
+selected = 0
 
 [node name="DeleteConfirmation" type="ConfirmationDialog" parent="."]
 margin_right = 218.0
