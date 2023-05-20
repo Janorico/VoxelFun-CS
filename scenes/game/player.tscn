@@ -28,6 +28,10 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.85, 0 )
 [node name="Camera" type="Camera" parent="CameraBase"]
 far = 500.0
 
+[node name="Headlamp" type="SpotLight" parent="CameraBase/Camera"]
+light_energy = 0.0
+spot_range = 50.0
+
 [node name="RayCast" type="RayCast" parent="CameraBase/Camera"]
 enabled = true
 cast_to = Vector3( 0, 0, -5 )

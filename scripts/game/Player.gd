@@ -5,6 +5,7 @@ onready var camera = $CameraBase/Camera
 onready var camera_base = $CameraBase
 onready var raycast = $CameraBase/Camera/RayCast
 onready var info_label = $CameraBase/Camera/Label
+onready var headlamp: SpotLight = $CameraBase/Camera/Headlamp
 # Reset values
 onready var initial_position: Vector3 = translation
 onready var initial_rotation: Vector3 = rotation_degrees
@@ -106,3 +107,8 @@ func _physics_process(delta):
 			translation = initial_position
 			rotation_degrees = initial_rotation
 			velocity = Vector3.ZERO
+		if Input.is_action_just_released("headlamp"):
+			match headlamp.light_energy:
+				0.0: headlamp.light_energy = 1.0
+				1.0: headlamp.light_energy = 2.0
+				2.0: headlamp.light_energy = 0.0
