@@ -1,6 +1,7 @@
 class_name Player
 extends KinematicBody
 
+onready var stair_detector: RayCast = $StairDetector
 onready var camera = $CameraBase/Camera
 onready var camera_base = $CameraBase
 onready var raycast = $CameraBase/Camera/RayCast
@@ -88,6 +89,8 @@ func _physics_process(delta):
 			
 			if Input.is_action_pressed("forward"):
 				direction -= camera_base_basis.z #forward is negative in Godot
+				if stair_detector.is_colliding() and is_on_floor():
+					velocity.y = jump_vel * power_multipler
 			if Input.is_action_pressed("backward"):
 				direction += camera_base_basis.z
 			
