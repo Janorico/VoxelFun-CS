@@ -1,7 +1,7 @@
 extends ChunkGenerator
 
 
-static func generate_surface(height, x, y, z):
+static func generate_surface(height, _x, y, _z):
 	var type
 	if y < height - 10 or y == 0:
 		type = "Stone"
@@ -15,7 +15,7 @@ static func generate_surface(height, x, y, z):
 static func generate_details(c, rng, ground_height):
 	# Now generate cactus
 	var cactus_width = 2
-	for n_cactus in range(0, rng.randi_range(0, 3)):
+	for _n_cactus in range(0, rng.randi_range(0, 3)):
 		var x = rng.randi_range(cactus_width, c.DIMENSION.x - cactus_width - 1)
 		var z = rng.randi_range(cactus_width, c.DIMENSION.z - cactus_width - 1)
 		# Place a cactus at this position up to some height
@@ -49,7 +49,7 @@ static func generate_details(c, rng, ground_height):
 						b.create("Cactus")
 						c._set_block_data(x + offset.x, y, z + offset.z, b, false)
 	# Now some tufts of grass
-	for n_shrub in range(0, rng.randi_range(0, 5)):
+	for _n_shrub in range(0, rng.randi_range(0, 5)):
 		var x = rng.randi_range(0, c.DIMENSION.x - 1)
 		var z = rng.randi_range(0, c.DIMENSION.z - 1)
 		var y = ground_height[x][z]

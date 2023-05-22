@@ -17,8 +17,7 @@ static func generate_surface(height, _x, y, _z):
 static func generate_details(c, rng, ground_height):
 	# Now generate trees
 	var tree_width = 2
-	# warning-ignore:unused_variable
-	for n_tree in range(0, rng.randi_range(2, 8)):
+	for _n_tree in range(0, rng.randi_range(2, 8)):
 		var pos_x = rng.randi_range(tree_width, c.DIMENSION.x - tree_width - 1)
 		var pos_z = rng.randi_range(tree_width, c.DIMENSION.z - tree_width - 1)
 
@@ -47,16 +46,14 @@ static func generate_details(c, rng, ground_height):
 					l.create("Leaf")
 					c._set_block_data(lx, ly, lz, l, false)
 	# Now some tufts of grass
-	# warning-ignore:unused_variable
-	for n_shrub in range(0, rng.randi_range(6, 10)):
+	for _n_shrub in range(0, rng.randi_range(6, 10)):
 		var x = rng.randi_range(0, c.DIMENSION.x - 1)
 		var z = rng.randi_range(0, c.DIMENSION.z - 1)
 		var y = ground_height[x][z]
 		var b = c.BlockData.new()
 		b.create("Tall_Grass")
 		c._set_block_data(x, y, z, b, false)
-	# warning-ignore:unused_variable
-	for n_flower in range(0, rng.randi_range(4, 6)):
+	for _n_flower in range(0, rng.randi_range(4, 6)):
 		var x = rng.randi_range(0, c.DIMENSION.x - 1)
 		var z = rng.randi_range(0, c.DIMENSION.z - 1)
 		var y = ground_height[x][z]
