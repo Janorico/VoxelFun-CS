@@ -22,6 +22,7 @@ const SPEED = 5
 var velocity = Vector3.ZERO
 const gravity = 9.8
 var jump_vel = 5
+var fly: bool = false
 
 var paused = false
 
@@ -80,7 +81,7 @@ func _physics_process(delta):
 		selected_block = Chunk.block_types.keys()[selected_block_index]
 		
 		var power_multipler = (Input.get_action_strength("run") + 1)
-		if Input.is_action_just_pressed("jump") and is_on_floor():
+		if Input.is_action_just_pressed("jump") and is_on_floor() and not fly:
 			velocity.y = jump_vel * power_multipler
 		else:
 			var camera_base_basis = self.get_global_transform().basis
@@ -89,7 +90,7 @@ func _physics_process(delta):
 			
 			if Input.is_action_pressed("forward"):
 				direction -= camera_base_basis.z #forward is negative in Godot
-				if stair_detector.is_colliding() and is_on_floor():
+				if stair_detector.is_colliding() and is_on_floor() and not fly:
 					velocity.y = jump_vel * power_multipler
 			if Input.is_action_pressed("backward"):
 				direction += camera_base_basis.z
@@ -104,12 +105,17 @@ func _physics_process(delta):
 			var speed_input = SPEED * power_multipler
 			velocity.x = direction.x * speed_input
 			velocity.z = direction.z * speed_input
-		velocity.y -= gravity * delta
+		if fly:
+			velocity.y = move_toward(velocity.y, Input.get_axis("sink", "jump") * jump_vel, delta * 10)
+		else:
+			velocity.y -= gravity * delta
 		velocity = move_and_slide(velocity, Vector3.UP)
 		if Input.is_action_just_released("reset_player"):
 			translation = initial_position
 			rotation_degrees = initial_rotation
 			velocity = Vector3.ZERO
+		if Input.is_action_just_released("toggle_fly"):
+			fly = not fly
 		if Input.is_action_just_released("headlamp"):
 			match headlamp.light_energy:
 				0.0: headlamp.light_energy = 1.0
