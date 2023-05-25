@@ -9,7 +9,7 @@ static func generate_surface(height, _x, y, _z):
 		type = "Dirt"
 	elif y == height - 3 or y == height - 4:
 		type = "Stone"
-	elif y < height - 14:
+	elif y < height - 14 or y == 0:
 		type = "Stone"
 	else:
 		type = "Air"
