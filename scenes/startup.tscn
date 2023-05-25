@@ -255,7 +255,7 @@ margin_top = 36.0
 margin_right = 289.0
 margin_bottom = 64.0
 text = "Forest"
-items = [ "Forest", null, false, 0, null, "Desert", null, false, 1, null, "Boreal", null, false, 2, null ]
+items = [ "Forest", null, false, 0, null, "Desert", null, false, 1, null, "Boreal", null, false, 2, null, "Cave", null, false, 3, null ]
 selected = 0
 
 [node name="DeleteConfirmation" type="ConfirmationDialog" parent="."]
