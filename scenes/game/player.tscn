@@ -46,7 +46,7 @@ scale = Vector2( 2, 2 )
 texture = ExtResource( 3 )
 script = ExtResource( 2 )
 
-[node name="Label" type="Label" parent="CameraBase/Camera"]
+[node name="InfoLabel" type="Label" parent="CameraBase/Camera"]
 margin_right = 40.0
 margin_bottom = 14.0
 text = "Block: "

@@ -5,7 +5,7 @@ onready var stair_detector: RayCast = $StairDetector
 onready var camera = $CameraBase/Camera
 onready var camera_base = $CameraBase
 onready var raycast = $CameraBase/Camera/RayCast
-onready var info_label = $CameraBase/Camera/Label
+onready var info_label = $CameraBase/Camera/InfoLabel
 onready var headlamp: SpotLight = $CameraBase/Camera/Headlamp
 # Reset values
 onready var initial_position: Vector3 = translation
