@@ -14,6 +14,7 @@ onready var initial_rotation: Vector3 = rotation_degrees
 var Chunk = load("res://scripts/game/Chunk.gd")
 var selected_block = Chunk.block_types.keys()[0]
 var selected_block_index = 0
+export var selected_block_texture: AtlasTexture
 
 var camera_x_rotation = 0
 
@@ -79,6 +80,13 @@ func _physics_process(delta):
 			if selected_block_index >= Chunk.block_types.keys().size():
 				selected_block_index -= Chunk.block_types.keys().size()
 		selected_block = Chunk.block_types.keys()[selected_block_index]
+		var block = Chunk.block_types[selected_block]
+		if block.has(Chunk.Side.left):
+			selected_block_texture.region.position = block[Chunk.Side.left] * 16
+		elif block.has(Chunk.Side.only):
+			selected_block_texture.region.position = block[Chunk.Side.only] * 16
+		else:
+			selected_block_texture.region.position = Vector2(-16, -16)
 		
 		var power_multipler = (Input.get_action_strength("run") + 1)
 		if Input.is_action_just_pressed("jump") and is_on_floor() and not fly:
