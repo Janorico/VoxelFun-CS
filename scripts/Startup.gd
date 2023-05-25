@@ -66,6 +66,10 @@ func show_message(msg: String):
 	animation_player.play("message")
 
 
+func open(index: int):
+	open_world(worlds[index], null)
+
+
 func _on_new_world_dialog_confirmed():
 	var wname = new_world_name.text
 	var wtype = new_world_type.text
@@ -78,7 +82,7 @@ func _on_new_world_dialog_confirmed():
 func _on_open_button_pressed():
 	var selected_items = worlds_list.get_selected_items()
 	if selected_items.size() > 0:
-		open_world(worlds[selected_items[0]], null)
+		open(selected_items[0])
 	else:
 		show_message("No selection!")
 

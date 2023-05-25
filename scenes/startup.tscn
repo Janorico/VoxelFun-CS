@@ -268,6 +268,7 @@ autoplay = "page1"
 anims/message = SubResource( 4 )
 anims/page1 = SubResource( 2 )
 
+[connection signal="item_activated" from="MarginContainer/Page1/WorldsList" to="." method="open"]
 [connection signal="pressed" from="MarginContainer/Page1/Actions/NewButton" to="NewWorldDialog" method="popup_centered"]
 [connection signal="pressed" from="MarginContainer/Page1/Actions/OpenButton" to="." method="_on_open_button_pressed"]
 [connection signal="pressed" from="MarginContainer/Page1/Actions/DeleteButton" to="." method="_on_delete_button_pressed"]
