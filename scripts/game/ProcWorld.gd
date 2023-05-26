@@ -108,12 +108,13 @@ func update_player_pos(new_pos):
 	_new_chunk_pos = new_pos
 
 
-func change_block(cx, cz, bx, by, bz, t):
+func change_block(cx, cz, bx, by, bz, t, update = true):
 	var c = _loaded_chunks[Vector2(cx, cz)]
 	if c._block_data[bx][by][bz].type != t:
 		c._block_data[bx][by][bz].create(t)
-		_update_chunk(cx, cz)
 		world_data["%d,%d,%d,%d,%d" % [bx, by, bz, cx, cz]] = t
+		if update:
+			_update_chunk(cx, cz)
 
 
 func _load_chunk(cx, cz):
