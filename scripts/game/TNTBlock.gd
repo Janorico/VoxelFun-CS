@@ -4,15 +4,13 @@ extends StaticBody
 const remove_radius = 5
 var pw
 var chunk_size
-onready var mesh_instance: MeshInstance = $MeshInstance
-onready var explosion: CPUParticles = $Explosion
-onready var explosion_sound: AudioStreamPlayer3D = $ExplosionSound
+onready var animation_player: AnimationPlayer = $AnimationPlayer
 
 
-func _on_timer_timeout():
-	explosion.emitting = true
-	explosion_sound.play()
-	mesh_instance.hide()
+func _physics_process(_delta):
+	if not Input.is_action_just_released("ignite_tnt"):
+		return
+	animation_player.play("explode")
 	var changed_chunks: Array = []
 	for x in range(translation.x - 5, translation.x + 5):
 		for y in range(translation.y - 5, translation.y + 5):
