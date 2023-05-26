@@ -28,6 +28,7 @@ var fly: bool = false
 var paused = false
 
 signal place_block(pos, norm, type)
+signal place_tnt_block(pos, norm)
 signal destroy_block(pos, norm)
 signal highlight_block(pos, norm)
 signal unhighlight_block()
@@ -66,7 +67,10 @@ func _physics_process(delta):
 				print("Click")
 				emit_signal("destroy_block", pos, norm)
 			elif Input.is_action_just_pressed("right_click"):
-				emit_signal("place_block", pos, norm, selected_block)
+				if Input.is_action_pressed("place_tnt_block"):
+					emit_signal("place_tnt_block", pos, norm)
+				else:
+					emit_signal("place_block", pos, norm, selected_block)
 		else:
 			emit_signal("unhighlight_block")
 		
