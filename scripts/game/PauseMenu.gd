@@ -30,6 +30,11 @@ func resume():
 	player.paused = false
 
 
+func _main_menu():
+	# warning-ignore:return_value_discarded
+	get_tree().change_scene("res://scenes/startup.tscn")
+
+
 func _quit():
 	get_tree().quit(0)
 
