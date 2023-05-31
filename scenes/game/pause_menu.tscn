@@ -1,6 +1,7 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://scripts/game/PauseMenu.gd" type="Script" id=1]
+[ext_resource path="res://scripts/game/SettingsDialog.gd" type="Script" id=2]
 
 [sub_resource type="Animation" id=1]
 resource_name = "hide"
@@ -117,31 +118,81 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer"]
-margin_left = 476.0
-margin_top = 242.0
-margin_right = 548.0
-margin_bottom = 334.0
+margin_left = 452.0
+margin_top = 226.0
+margin_right = 572.0
+margin_bottom = 350.0
+rect_min_size = Vector2( 120, 0 )
 
 [node name="ResumeButton" type="Button" parent="CenterContainer/VBoxContainer"]
-margin_right = 72.0
+margin_right = 120.0
 margin_bottom = 28.0
 text = "Resume"
 
-[node name="AboutButton" type="Button" parent="CenterContainer/VBoxContainer"]
+[node name="SettingsButton" type="Button" parent="CenterContainer/VBoxContainer"]
 margin_top = 32.0
-margin_right = 72.0
+margin_right = 120.0
 margin_bottom = 60.0
+text = "Settings"
+
+[node name="AboutButton" type="Button" parent="CenterContainer/VBoxContainer"]
+margin_top = 64.0
+margin_right = 120.0
+margin_bottom = 92.0
 text = "About"
 
 [node name="QuitButton" type="Button" parent="CenterContainer/VBoxContainer"]
-margin_top = 64.0
-margin_right = 72.0
-margin_bottom = 92.0
+margin_top = 96.0
+margin_right = 120.0
+margin_bottom = 124.0
 text = "Quit"
 
+[node name="SettingsDialog" type="ConfirmationDialog" parent="."]
+margin_right = 370.0
+margin_bottom = 100.0
+window_title = "Settings"
+script = ExtResource( 2 )
+
+[node name="GridContainer" type="GridContainer" parent="SettingsDialog"]
+margin_left = 8.0
+margin_top = 8.0
+margin_right = 362.0
+margin_bottom = 56.0
+columns = 2
+
+[node name="MasterLabel" type="Label" parent="SettingsDialog/GridContainer"]
+margin_right = 150.0
+margin_bottom = 22.0
+text = "Master Volume: "
+
+[node name="MasterSlider" type="HSlider" parent="SettingsDialog/GridContainer"]
+margin_left = 154.0
+margin_right = 354.0
+margin_bottom = 16.0
+rect_min_size = Vector2( 200, 0 )
+max_value = 1.0
+step = 0.01
+value = 1.0
+
+[node name="SFXLabel" type="Label" parent="SettingsDialog/GridContainer"]
+margin_top = 26.0
+margin_right = 150.0
+margin_bottom = 48.0
+text = "SFX Volume: "
+
+[node name="SFXSlider" type="HSlider" parent="SettingsDialog/GridContainer"]
+margin_left = 154.0
+margin_top = 26.0
+margin_right = 354.0
+margin_bottom = 42.0
+rect_min_size = Vector2( 200, 0 )
+max_value = 1.0
+step = 0.01
+value = 1.0
+
 [node name="AboutDialog" type="AcceptDialog" parent="."]
-margin_right = 83.0
-margin_bottom = 58.0
+margin_right = 724.0
+margin_bottom = 468.0
 window_title = "About"
 
 [node name="TabContainer" type="TabContainer" parent="AboutDialog"]
@@ -221,7 +272,10 @@ anims/hide = SubResource( 1 )
 anims/show = SubResource( 2 )
 
 [connection signal="pressed" from="CenterContainer/VBoxContainer/ResumeButton" to="." method="resume"]
+[connection signal="pressed" from="CenterContainer/VBoxContainer/SettingsButton" to="SettingsDialog" method="popup_centered"]
 [connection signal="pressed" from="CenterContainer/VBoxContainer/AboutButton" to="AboutDialog" method="popup_centered"]
 [connection signal="pressed" from="CenterContainer/VBoxContainer/QuitButton" to="." method="_quit"]
+[connection signal="about_to_show" from="SettingsDialog" to="SettingsDialog" method="_on_about_to_show"]
+[connection signal="confirmed" from="SettingsDialog" to="SettingsDialog" method="_on_confirmed"]
 [connection signal="meta_clicked" from="AboutDialog/TabContainer/About" to="." method="_on_rich_text_label_meta_clicked"]
 [connection signal="meta_clicked" from="AboutDialog/TabContainer/Sources" to="." method="_on_rich_text_label_meta_clicked"]

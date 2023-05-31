@@ -114,6 +114,7 @@ initial_velocity = 100.0
 
 [node name="ExplosionSound" type="AudioStreamPlayer3D" parent="."]
 stream = ExtResource( 4 )
+bus = "SFX"
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 anims/explode = SubResource( 6 )
