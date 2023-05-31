@@ -296,6 +296,11 @@ const block_types = {
 		Side.right:Vector2(3,2),Side.front:Vector2(3,2),Side.back:Vector2(3,2),
 		"Tags":[]
 		},
+	"Diamond":{
+		Side.top:Vector2(4,2),Side.bottom:Vector2(4,2),Side.left:Vector2(4,2),
+		Side.right:Vector2(4,2),Side.front:Vector2(4,2),Side.back:Vector2(4,2),
+		"Tags":[]
+		},
 	"Tall_Grass":{
 		Side.only:Vector2(0,3),
 		"Tags":[Tags.Flat, Tags.Transparent, Tags.No_Collision]

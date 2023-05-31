@@ -14,3 +14,7 @@ static func generate_surface(height, _x, y, _z):
 	else:
 		type = "Air"
 	return type
+
+
+static func generate_details(c, rng, ground_height):
+	.generate_details(c, rng, ground_height)

@@ -44,4 +44,5 @@ static func generate_details(c, rng, ground_height):
 					var l = c.BlockData.new()
 					l.create("Pine_Leaf")
 					c._set_block_data(lx, ly, lz, l, false, false)
+	.generate_details(c, rng, ground_height)
 	return

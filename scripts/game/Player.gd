@@ -12,6 +12,7 @@ onready var initial_position: Vector3 = translation
 onready var initial_rotation: Vector3 = rotation_degrees
 
 var Chunk = load("res://scripts/game/Chunk.gd")
+var block_exceptions = [9]
 var selected_block = Chunk.block_types.keys()[0]
 var selected_block_index = 0
 export var selected_block_texture: AtlasTexture
@@ -81,10 +82,14 @@ func _physics_process(delta):
 		# Scroll to change block
 		if Input.is_action_just_released("scroll_up"):
 			selected_block_index -= 1
+			if block_exceptions.has(selected_block_index):
+				selected_block_index -= 1
 			if selected_block_index < 0:
 				selected_block_index += Chunk.block_types.keys().size()
 		elif Input.is_action_just_released("scroll_down"):
 			selected_block_index += 1
+			if block_exceptions.has(selected_block_index):
+				selected_block_index += 1
 			if selected_block_index >= Chunk.block_types.keys().size():
 				selected_block_index -= Chunk.block_types.keys().size()
 		selected_block = Chunk.block_types.keys()[selected_block_index]

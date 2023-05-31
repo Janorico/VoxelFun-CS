@@ -60,4 +60,5 @@ static func generate_details(c, rng, ground_height):
 		var b = c.BlockData.new()
 		b.create("Flower")
 		c._set_block_data(x, y, z, b, false, false)
+	.generate_details(c, rng, ground_height)
 	return
