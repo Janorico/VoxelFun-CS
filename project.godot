@@ -160,6 +160,11 @@ ignite_tnt={
  ]
 }
 
+[logging]
+
+file_logging/log_path="user://logs/voxelfun.log"
+file_logging/max_log_files=20
+
 [rendering]
 
 quality/driver/driver_name="GLES2"
