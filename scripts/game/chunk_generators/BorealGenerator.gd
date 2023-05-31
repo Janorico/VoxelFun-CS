@@ -28,7 +28,7 @@ static func generate_details(c, rng, ground_height):
 			var x = pos_x
 			var z = pos_z
 			var y = ground_height[x][z] + i
-			c._set_block_data(x, y, z, b)
+			c._set_block_data(x, y, z, b, true, false)
 		# Place leaves
 		for dy in range(0, 5):
 			var leaf_width = tree_width
@@ -43,5 +43,5 @@ static func generate_details(c, rng, ground_height):
 					var lz = pos_z + dz
 					var l = c.BlockData.new()
 					l.create("Pine_Leaf")
-					c._set_block_data(lx, ly, lz, l, false)
+					c._set_block_data(lx, ly, lz, l, false, false)
 	return

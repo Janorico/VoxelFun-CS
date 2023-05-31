@@ -24,7 +24,7 @@ static func generate_details(c, rng, ground_height):
 			var b = c.BlockData.new()
 			b.create("Cactus")
 			var y = ground_height[x][z] + i
-			c._set_block_data(x, y, z, b)
+			c._set_block_data(x, y, z, b, true, false)
 		# Place 1 branch per side
 		# Left
 		var dir = Vector2(1, 0)
@@ -37,7 +37,7 @@ static func generate_details(c, rng, ground_height):
 				var y = ground_height[x][z] + branch_height
 				var b = c.BlockData.new()
 				b.create("Cactus")
-				c._set_block_data(x + side.x, y, z + side.y, b)
+				c._set_block_data(x + side.x, y, z + side.y, b, true, false)
 			else:
 				# Full branch
 				for offset in [
@@ -47,7 +47,7 @@ static func generate_details(c, rng, ground_height):
 						var y = ground_height[x][z] + branch_height + offset.y
 						var b = c.BlockData.new()
 						b.create("Cactus")
-						c._set_block_data(x + offset.x, y, z + offset.z, b, false)
+						c._set_block_data(x + offset.x, y, z + offset.z, b, false, false)
 	# Now some tufts of grass
 	for _n_shrub in range(0, rng.randi_range(0, 5)):
 		var x = rng.randi_range(0, c.DIMENSION.x - 1)
@@ -55,5 +55,5 @@ static func generate_details(c, rng, ground_height):
 		var y = ground_height[x][z]
 		var b = c.BlockData.new()
 		b.create("Shrub")
-		c._set_block_data(x, y, z, b, false)
+		c._set_block_data(x, y, z, b, false, false)
 	return

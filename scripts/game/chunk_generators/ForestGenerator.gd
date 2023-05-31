@@ -29,7 +29,7 @@ static func generate_details(c, rng, ground_height):
 			var x = pos_x
 			var z = pos_z
 			var y = ground_height[x][z] + i
-			c._set_block_data(x, y, z, b)
+			c._set_block_data(x, y, z, b, true, false)
 		# Place leaves
 		var min_y = rng.randi_range(-2, -1)
 		var max_y = rng.randi_range(2,4)
@@ -44,7 +44,7 @@ static func generate_details(c, rng, ground_height):
 					var lz = pos_z + dz
 					var l = c.BlockData.new()
 					l.create("Leaf")
-					c._set_block_data(lx, ly, lz, l, false)
+					c._set_block_data(lx, ly, lz, l, false, false)
 	# Now some tufts of grass
 	for _n_shrub in range(0, rng.randi_range(6, 10)):
 		var x = rng.randi_range(0, c.DIMENSION.x - 1)
@@ -52,12 +52,12 @@ static func generate_details(c, rng, ground_height):
 		var y = ground_height[x][z]
 		var b = c.BlockData.new()
 		b.create("Tall_Grass")
-		c._set_block_data(x, y, z, b, false)
+		c._set_block_data(x, y, z, b, false, false)
 	for _n_flower in range(0, rng.randi_range(4, 6)):
 		var x = rng.randi_range(0, c.DIMENSION.x - 1)
 		var z = rng.randi_range(0, c.DIMENSION.z - 1)
 		var y = ground_height[x][z]
 		var b = c.BlockData.new()
 		b.create("Flower")
-		c._set_block_data(x, y, z, b, false)
+		c._set_block_data(x, y, z, b, false, false)
 	return

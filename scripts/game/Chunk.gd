@@ -72,9 +72,9 @@ func _ready():
 	mat.albedo_texture.set_flags(2)
 
 
-func _set_block_data(x, y, z, b, overwrite = true):
+func _set_block_data(x, y, z, b, overwrite = true, overwrite_world_data = true):
 	if x >= 0 and x < DIMENSION.x and y >= 0 and y < DIMENSION.y and z >= 0 and z < DIMENSION.z:
-		if overwrite or _block_data[x][y][z].type == "Air":
+		if (overwrite_world_data or not world.world_data.has("%d,%d,%d,%d,%d" % [x, y, z, chunk_coord.x, chunk_coord.y])) and (overwrite or _block_data[x][y][z].type == "Air"):
 			_block_data[x][y][z] = b
 
 
