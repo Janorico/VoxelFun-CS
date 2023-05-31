@@ -92,7 +92,7 @@ tracks/4/keys = {
 } ]
 }
 
-[node name="TNTBlock" type="StaticBody"]
+[node name="TNTBlock" type="StaticBody" groups=["tnt_blocks"]]
 script = ExtResource( 3 )
 
 [node name="MeshInstance" type="MeshInstance" parent="."]

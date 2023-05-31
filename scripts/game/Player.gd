@@ -65,7 +65,11 @@ func _physics_process(delta):
 			emit_signal("highlight_block", pos, norm)
 			if Input.is_action_just_pressed("click"):
 				print("Click")
-				emit_signal("destroy_block", pos, norm)
+				var collider: Node = raycast.get_collider()
+				if collider.is_in_group("tnt_blocks"):
+					collider.queue_free()
+				else:
+					emit_signal("destroy_block", pos, norm)
 			elif Input.is_action_just_pressed("right_click"):
 				if Input.is_action_pressed("place_tnt_block"):
 					emit_signal("place_tnt_block", pos, norm)
