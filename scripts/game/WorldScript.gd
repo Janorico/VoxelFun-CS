@@ -49,6 +49,7 @@ func _process(_delta):
 	# Save world on CTRL+S pressed
 	if Input.is_action_just_released("save"):
 		pw.save_world()
+		Global.save()
 
 
 func _on_tree_exiting():
