@@ -142,6 +142,7 @@ text = "Quit"
 [node name="AboutDialog" type="AcceptDialog" parent="."]
 margin_right = 83.0
 margin_bottom = 58.0
+window_title = "About"
 
 [node name="TabContainer" type="TabContainer" parent="AboutDialog"]
 margin_left = 8.0
