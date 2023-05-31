@@ -1,6 +1,7 @@
 extends Node
 
 
+signal diamond_collected
 # Config file path
 const CONFIG_PATH: String = "user://config.cfg"
 # Config sections/keys
@@ -28,6 +29,7 @@ func _ready():
 func collect_diamond():
 	diamonds += 1
 	collected_diamonds += 1
+	emit_signal("diamond_collected")
 
 
 func apply():

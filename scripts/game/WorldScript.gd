@@ -2,6 +2,7 @@ extends Spatial
 
 var initial_world_path: String = "user://worlds/default"
 var initial_world_type = null
+onready var diamonds_label: Label = $DiamondsView/CenterContainer/Label
 var pw
 onready var player = $Player
 onready var block_outline = $BlockOutline
@@ -14,6 +15,9 @@ var chunk_pos = Vector2()
 
 
 func _ready():
+	update_diamonds_label()
+	# warning-ignore:return_value_discarded
+	Global.connect("diamond_collected", self, "update_diamonds_label")
 	print("CREATING WORLD")
 	pw = ProcWorld.new(initial_world_path)
 	if initial_world_type != null:
@@ -50,6 +54,10 @@ func _process(_delta):
 	if Input.is_action_just_released("save"):
 		pw.save_world()
 		Global.save()
+
+
+func update_diamonds_label():
+	diamonds_label.text = str(Global.diamonds)
 
 
 func _on_tree_exiting():
