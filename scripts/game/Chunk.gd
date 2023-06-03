@@ -247,7 +247,15 @@ enum Side {
 enum Tags {
 	Transparent,
 	No_Collision,
-	Flat
+	Flat,
+	Dont_List
+}
+
+const extra_blocks = {
+	"TNT": {
+		"Preview": preload("res://assets/blocks/tnt_preview.png"),
+		"Instance": preload("res://scenes/game/blocks/tnt.tscn"),
+	},
 }
 
 const block_types = {
@@ -299,7 +307,7 @@ const block_types = {
 	"Diamond":{
 		Side.top:Vector2(4,2),Side.bottom:Vector2(4,2),Side.left:Vector2(4,2),
 		Side.right:Vector2(4,2),Side.front:Vector2(4,2),Side.back:Vector2(4,2),
-		"Tags":[]
+		"Tags":[Tags.Dont_List]
 		},
 	"Tall_Grass":{
 		Side.only:Vector2(0,3),

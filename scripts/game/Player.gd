@@ -6,16 +6,18 @@ onready var camera = $CameraBase/Camera
 onready var camera_base = $CameraBase
 onready var raycast = $CameraBase/Camera/RayCast
 onready var info_label = $CameraBase/Camera/InfoLabel
+onready var selected_block_preview: TextureRect = $CameraBase/Camera/SelectedBlockPreview
+onready var selected_block_name: Label = $CameraBase/Camera/SelectedBlockPreview/NameLabel
+onready var block_dialog: PopupPanel = $CameraBase/Camera/BlockPopup
+onready var blocks_list: ItemList = $CameraBase/Camera/BlockPopup/List
 onready var headlamp: SpotLight = $CameraBase/Camera/Headlamp
 # Reset values
 onready var initial_position: Vector3 = translation
 onready var initial_rotation: Vector3 = rotation_degrees
 
 var Chunk = load("res://scripts/game/Chunk.gd")
-var block_exceptions = [9]
-var selected_block = Chunk.block_types.keys()[0]
-var selected_block_index = 0
-export var selected_block_texture: AtlasTexture
+var selected_block = 0
+export var blocks_texture: AtlasTexture
 
 var camera_x_rotation = 0
 
@@ -29,7 +31,6 @@ var fly: bool = false
 var paused = false
 
 signal place_block(pos, norm, type)
-signal place_tnt_block(pos, norm)
 signal destroy_block(pos, norm)
 signal highlight_block(pos, norm)
 signal unhighlight_block()
@@ -37,6 +38,25 @@ signal unhighlight_block()
 
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+	update_block_preview()
+	# Setup blocks list
+	blocks_list.clear()
+	var idx = 0
+	for block_name in Chunk.block_types:
+		var block = Chunk.block_types[block_name]
+		var preview = blocks_texture.duplicate()
+		if block.has(Chunk.Side.left):
+			preview.region.position = block[Chunk.Side.left] * 16
+		elif block.has(Chunk.Side.only):
+			preview.region.position = block[Chunk.Side.only] * 16
+		else:
+			preview.region.position = Vector2(-16, -16)
+		blocks_list.add_item(block_name, preview)
+		if block["Tags"].has(Chunk.Tags.Dont_List):
+			blocks_list.set_item_disabled(idx, true)
+		idx += 1
+	for block_name in Chunk.extra_blocks:
+		blocks_list.add_item(block_name, Chunk.extra_blocks[block_name]["Preview"])
 
 
 func _input(event):
@@ -57,7 +77,7 @@ func _physics_process(delta):
 	var px = self.translation.x - cx * Chunk.DIMENSION.x
 	var py = self.translation.y
 	var pz = self.translation.z - cz * Chunk.DIMENSION.z
-	info_label.text = "Selected block %s, Chunk (%d, %d) pos (%d, %d, %d)" % [selected_block, cx, cz, px, py, pz]
+	info_label.text = "Chunk (%d, %d) pos (%d, %d, %d)" % [cx, cz, px, py, pz]
 	if not paused:
 		# Check the raycast
 		if raycast.is_colliding():
@@ -66,40 +86,14 @@ func _physics_process(delta):
 			emit_signal("highlight_block", pos, norm)
 			if Input.is_action_just_pressed("click"):
 				print("Click")
-				var collider: Node = raycast.get_collider()
-				if collider.is_in_group("tnt_blocks"):
-					collider.queue_free()
-				else:
-					emit_signal("destroy_block", pos, norm)
+				emit_signal("destroy_block", pos, norm)
 			elif Input.is_action_just_pressed("right_click"):
-				if Input.is_action_pressed("place_tnt_block"):
-					emit_signal("place_tnt_block", pos, norm)
-				else:
-					emit_signal("place_block", pos, norm, selected_block)
+				emit_signal("place_block", pos, norm, selected_block)
 		else:
 			emit_signal("unhighlight_block")
 		
-		# Scroll to change block
-		if Input.is_action_just_released("scroll_up"):
-			selected_block_index -= 1
-			if block_exceptions.has(selected_block_index):
-				selected_block_index -= 1
-			if selected_block_index < 0:
-				selected_block_index += Chunk.block_types.keys().size()
-		elif Input.is_action_just_released("scroll_down"):
-			selected_block_index += 1
-			if block_exceptions.has(selected_block_index):
-				selected_block_index += 1
-			if selected_block_index >= Chunk.block_types.keys().size():
-				selected_block_index -= Chunk.block_types.keys().size()
-		selected_block = Chunk.block_types.keys()[selected_block_index]
-		var block = Chunk.block_types[selected_block]
-		if block.has(Chunk.Side.left):
-			selected_block_texture.region.position = block[Chunk.Side.left] * 16
-		elif block.has(Chunk.Side.only):
-			selected_block_texture.region.position = block[Chunk.Side.only] * 16
-		else:
-			selected_block_texture.region.position = Vector2(-16, -16)
+		if Input.is_action_just_released("open_block_dialog"):
+			block_dialog.popup_centered()
 		
 		var power_multipler = (Input.get_action_strength("run") + 1)
 		if Input.is_action_just_pressed("jump") and is_on_floor() and not fly:
@@ -142,3 +136,34 @@ func _physics_process(delta):
 				0.0: headlamp.light_energy = 1.0
 				1.0: headlamp.light_energy = 2.0
 				2.0: headlamp.light_energy = 0.0
+
+
+func update_block_preview():
+	if selected_block < Chunk.block_types.size():
+		var block_name = Chunk.block_types.keys()[selected_block]
+		var block = Chunk.block_types[block_name]
+		selected_block_preview.texture = blocks_texture
+		selected_block_name.text = block_name
+		if block.has(Chunk.Side.left):
+			blocks_texture.region.position = block[Chunk.Side.left] * 16
+		elif block.has(Chunk.Side.only):
+			blocks_texture.region.position = block[Chunk.Side.only] * 16
+		else:
+			blocks_texture.region.position = Vector2(-16, -16)
+	else:
+		var block_name = Chunk.extra_blocks.keys()[selected_block - Chunk.block_types.size()]
+		var block = Chunk.extra_blocks[block_name]
+		selected_block_preview.texture = block["Preview"]
+		selected_block_name.text = block_name
+
+
+func _on_block_popup_about_to_show():
+	paused = true
+	blocks_list.select(selected_block)
+
+
+func _on_block_selected(index: int):
+	block_dialog.hide()
+	selected_block = index
+	update_block_preview()
+	paused = false

@@ -7,7 +7,6 @@ var pw
 onready var player = $Player
 onready var block_outline = $BlockOutline
 
-const TNT_BLOCK = preload("res://scenes/game/tnt_block.tscn")
 var Chunk = load("res://scripts/game/Chunk.gd")
 var ProcWorld = load("res://scripts/game/ProcWorld.gd")
 
@@ -28,8 +27,6 @@ func _ready():
 	
 	# warning-ignore:return_value_discarded
 	player.connect("place_block", self, "_on_player_place_block")
-	# warning-ignore:return_value_discarded
-	player.connect("place_tnt_block", self, "_on_player_place_tnt_block")
 	# warning-ignore:return_value_discarded
 	player.connect("destroy_block", self, "_on_player_destroy_block")
 	# warning-ignore:return_value_discarded
@@ -98,16 +95,16 @@ func _on_player_place_block(pos, norm, t):
 	var bx = fposmod(floor(pos.x), Chunk.DIMENSION.x) + 0.5
 	var by = fposmod(floor(pos.y), Chunk.DIMENSION.y) + 0.5
 	var bz = fposmod(floor(pos.z), Chunk.DIMENSION.z) + 0.5
-	#pw.change_block(cx, cz, bx, by, bz, t)
-	pw.call_deferred("change_block", cx, cz, bx, by, bz, t)
-
-func _on_player_place_tnt_block(pos, norm):
-	pos += norm * 0.5
-	var tnt = TNT_BLOCK.instance()
-	tnt.pw = pw
-	tnt.chunk_size = Chunk.DIMENSION
-	tnt.translation = Vector3(floor(pos.x) + 0.5, floor(pos.y) + 0.5, floor(pos.z) + 0.5)
-	add_child(tnt)
+	
+	if t < Chunk.block_types.size():
+		#pw.change_block(cx, cz, bx, by, bz, Chunk.block_types.keys()[t])
+		pw.call_deferred("change_block", cx, cz, bx, by, bz, Chunk.block_types.keys()[t])
+	else:
+		var block_instance: Spatial = Chunk.extra_blocks.values()[t - Chunk.block_types.size()]["Instance"].instance()
+		block_instance.chunk_size = Chunk.DIMENSION
+		block_instance.pw = pw
+		block_instance.translation = Vector3(((cx * Chunk.DIMENSION.x) + bx), by, ((cz * Chunk.DIMENSION.z) + bz))
+		add_child(block_instance)
 
 func _on_player_highlight_block(pos, norm):
 	block_outline.visible = true

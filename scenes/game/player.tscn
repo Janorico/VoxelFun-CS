@@ -20,7 +20,7 @@ radius = 0.5
 
 [node name="Player" type="KinematicBody"]
 script = ExtResource( 1 )
-selected_block_texture = SubResource( 3 )
+blocks_texture = SubResource( 3 )
 
 [node name="MeshInstance" type="MeshInstance" parent="."]
 transform = Transform( 1, 0, 0, 0, -1.62921e-07, -1, 0, 1, -1.62921e-07, 0, 0, 0 )
@@ -54,9 +54,7 @@ texture = ExtResource( 3 )
 script = ExtResource( 2 )
 
 [node name="InfoLabel" type="Label" parent="CameraBase/Camera"]
-margin_right = 40.0
-margin_bottom = 14.0
-text = "Block: "
+margin_bottom = 22.0
 
 [node name="SelectedBlockPreview" type="TextureRect" parent="CameraBase/Camera"]
 anchor_left = 1.0
@@ -66,5 +64,27 @@ anchor_bottom = 1.0
 margin_left = -128.0
 margin_top = -128.0
 rect_min_size = Vector2( 128, 128 )
-texture = SubResource( 3 )
+expand = true
 stretch_mode = 1
+
+[node name="NameLabel" type="Label" parent="CameraBase/Camera/SelectedBlockPreview"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+align = 1
+valign = 1
+
+[node name="BlockPopup" type="PopupPanel" parent="CameraBase/Camera"]
+margin_right = 392.0
+margin_bottom = 264.0
+popup_exclusive = true
+
+[node name="List" type="ItemList" parent="CameraBase/Camera/BlockPopup"]
+margin_left = 4.0
+margin_top = 4.0
+margin_right = 388.0
+margin_bottom = 260.0
+rect_min_size = Vector2( 384, 256 )
+fixed_icon_size = Vector2( 16, 16 )
+
+[connection signal="about_to_show" from="CameraBase/Camera/BlockPopup" to="." method="_on_block_popup_about_to_show"]
+[connection signal="item_activated" from="CameraBase/Camera/BlockPopup/List" to="." method="_on_block_selected"]
