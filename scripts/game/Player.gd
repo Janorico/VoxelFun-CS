@@ -31,7 +31,7 @@ var fly: bool = false
 var paused = false
 
 signal place_block(pos, norm, type)
-signal destroy_block(pos, norm)
+signal destroy_block(pos, norm, collider)
 signal highlight_block(pos, norm)
 signal unhighlight_block()
 
@@ -86,7 +86,7 @@ func _physics_process(delta):
 			emit_signal("highlight_block", pos, norm)
 			if Input.is_action_just_pressed("click"):
 				print("Click")
-				emit_signal("destroy_block", pos, norm)
+				emit_signal("destroy_block", pos, norm, raycast.get_collider())
 			elif Input.is_action_just_pressed("right_click"):
 				emit_signal("place_block", pos, norm, selected_block)
 		else:

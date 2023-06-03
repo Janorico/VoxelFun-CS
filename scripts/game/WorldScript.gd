@@ -67,20 +67,23 @@ func _on_tree_exiting():
 	print("Finished")
 
 
-func _on_player_destroy_block(pos, norm):
-	# Take a half step into the block
-	pos -= norm * 0.5
-	
-	# Get chunk from pos
-	var cx = int(floor(pos.x / Chunk.DIMENSION.x))
-	var cz = int(floor(pos.z / Chunk.DIMENSION.z))
-	
-	# Get block from pos
-	var bx = fposmod(floor(pos.x), Chunk.DIMENSION.x) + 0.5
-	var by = fposmod(floor(pos.y), Chunk.DIMENSION.y) + 0.5
-	var bz = fposmod(floor(pos.z), Chunk.DIMENSION.z) + 0.5
-	#pw.change_block(cx, cz, bx, by, bz, "Air")
-	pw.call_deferred("change_block", cx, cz, bx, by, bz, "Air")
+func _on_player_destroy_block(pos, norm, collider):
+	if collider.is_in_group("extra_blocks"):
+		collider.queue_free()
+	else:
+		# Take a half step into the block
+		pos -= norm * 0.5
+		
+		# Get chunk from pos
+		var cx = int(floor(pos.x / Chunk.DIMENSION.x))
+		var cz = int(floor(pos.z / Chunk.DIMENSION.z))
+		
+		# Get block from pos
+		var bx = fposmod(floor(pos.x), Chunk.DIMENSION.x) + 0.5
+		var by = fposmod(floor(pos.y), Chunk.DIMENSION.y) + 0.5
+		var bz = fposmod(floor(pos.z), Chunk.DIMENSION.z) + 0.5
+		#pw.change_block(cx, cz, bx, by, bz, "Air")
+		pw.call_deferred("change_block", cx, cz, bx, by, bz, "Air")
 
 
 func _on_player_place_block(pos, norm, t):
