@@ -37,7 +37,6 @@ signal unhighlight_block()
 
 
 func _ready():
-	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	update_block_preview()
 	# Setup blocks list
 	blocks_list.clear()
