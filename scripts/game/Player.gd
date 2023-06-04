@@ -163,6 +163,8 @@ func _on_block_popup_about_to_show():
 
 
 func _on_block_selected(index: int):
+	if selected_block < Chunk.block_types.size() and Chunk.block_types.values()[index]["Tags"].has(Chunk.Tags.Dont_List):
+		return
 	block_dialog.hide()
 	selected_block = index
 	update_block_preview()
