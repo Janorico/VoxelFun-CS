@@ -20,6 +20,16 @@ func _ready():
 
 
 func init_server(info: Dictionary):
+	# Setup UPNP
+	var upnp = UPNP.new()
+	var err = upnp.discover()
+	if err == OK:
+		if upnp.get_gateway() and upnp.get_gateway().is_valid_gateway():
+			upnp.get_gateway().add_port_mapping(PORT, PORT, "VoxelFun Multiplayer", "UDP")
+			upnp.get_gateway().add_port_mapping(PORT, PORT, "VoxelFun Multiplayer", "TCP")
+	else:
+		push_error("UPNP error: %d" % err)
+	# Setup multiplayer
 	my_player = info
 	var peer = NetworkedMultiplayerENet.new()
 	peer.create_server(PORT, MAX_CLIENTS)
