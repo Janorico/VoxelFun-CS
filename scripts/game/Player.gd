@@ -2,7 +2,6 @@ class_name Player
 extends KinematicBody
 
 onready var stair_detector: RayCast = $StairDetector
-onready var camera = $CameraBase/Camera
 onready var camera_base = $CameraBase
 onready var raycast = $CameraBase/Camera/RayCast
 onready var info_label = $CameraBase/Camera/InfoLabel
@@ -10,7 +9,7 @@ onready var selected_block_preview: TextureRect = $CameraBase/Camera/SelectedBlo
 onready var selected_block_name: Label = $CameraBase/Camera/SelectedBlockPreview/NameLabel
 onready var block_dialog: PopupPanel = $CameraBase/Camera/BlockPopup
 onready var blocks_list: ItemList = $CameraBase/Camera/BlockPopup/List
-onready var headlamp: SpotLight = $CameraBase/Camera/Headlamp
+onready var headlamp: SpotLight = $CameraBase/Headlamp
 # Reset values
 onready var initial_position: Vector3 = translation
 onready var initial_rotation: Vector3 = rotation_degrees
@@ -29,6 +28,7 @@ var jump_vel = 5
 var fly: bool = false
 
 var paused = false
+var is_finished: bool = false
 
 signal place_block(pos, norm, type)
 signal destroy_block(pos, norm, collider)
@@ -37,6 +37,14 @@ signal unhighlight_block()
 
 
 func _ready():
+	if not get_tree().has_network_peer():
+		finished()
+
+
+func finished():
+	is_finished = true
+	if not (not get_tree().has_network_peer() or is_network_master()):
+		return
 	update_block_preview()
 	# Setup blocks list
 	blocks_list.clear()
@@ -59,6 +67,8 @@ func _ready():
 
 
 func _input(event):
+	if not (not get_tree().has_network_peer() or is_network_master()) or not is_finished:
+		return
 	# Mouse movement
 	if not paused:
 		if event is InputEventMouseMotion:
@@ -66,11 +76,13 @@ func _input(event):
 			
 			var x_delta = event.relative.y * mouse_sensitivity
 			if camera_x_rotation + x_delta > -90 and camera_x_rotation + x_delta < 90:
-				camera.rotate_x(deg2rad(-x_delta))
+				camera_base.rotate_x(deg2rad(-x_delta))
 				camera_x_rotation += x_delta
 
 
 func _physics_process(delta):
+	if not (not get_tree().has_network_peer() or is_network_master()) or not is_finished:
+		return
 	var cx = floor(self.translation.x / Chunk.DIMENSION.x)
 	var cz = floor(self.translation.z / Chunk.DIMENSION.z)
 	var px = self.translation.x - cx * Chunk.DIMENSION.x
@@ -135,6 +147,25 @@ func _physics_process(delta):
 				0.0: headlamp.light_energy = 1.0
 				1.0: headlamp.light_energy = 2.0
 				2.0: headlamp.light_energy = 0.0
+			if get_tree().has_network_peer():
+				Net.my_player["headlamp_energy"] = headlamp.light_energy
+				rpc("update_headlamp", headlamp.light_energy)
+		if get_tree().has_network_peer():
+			rpc("update", translation, rotation_degrees, camera_base.rotation_degrees.x)
+
+
+func initialize(id: int, info: Dictionary):
+	name = str(id)
+	set_network_master(id)
+	if is_network_master():
+		$NameLabel.queue_free()
+	else:
+		if info.has("headlamp_energy"):
+			headlamp.light_energy = info["headlamp_energy"]
+		$NameLabel.text = info["name"]
+		stair_detector.queue_free()
+		$CameraBase/Camera.queue_free()
+	finished()
 
 
 func update_block_preview():
@@ -154,6 +185,16 @@ func update_block_preview():
 		var block = Chunk.extra_blocks[block_name]
 		selected_block_preview.texture = block["Preview"]
 		selected_block_name.text = block_name
+
+
+remote func update(pos: Vector3, rot: Vector3, head_x: int):
+	translation = pos
+	rotation_degrees = rot
+	camera_base.rotation_degrees.x = head_x
+
+
+remote func update_headlamp(energy: float):
+	headlamp.light_energy = energy
 
 
 func _on_block_popup_about_to_show():

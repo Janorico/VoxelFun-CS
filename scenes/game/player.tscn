@@ -1,14 +1,19 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://scripts/game/Player.gd" type="Script" id=1]
 [ext_resource path="res://scripts/game/Crosshair.gd" type="Script" id=2]
 [ext_resource path="res://assets/crosshair.png" type="Texture" id=3]
 [ext_resource path="res://assets/TextureAtlas.dds" type="Texture" id=4]
+[ext_resource path="res://assets/font/JetBrainsMono-Bold.ttf" type="DynamicFontData" id=5]
 
 [sub_resource type="AtlasTexture" id=3]
 flags = 7
 atlas = ExtResource( 4 )
 region = Rect2( 16, 0, 16, 16 )
+
+[sub_resource type="DynamicFont" id=4]
+size = 96
+font_data = ExtResource( 5 )
 
 [sub_resource type="CapsuleMesh" id=1]
 radius = 0.5
@@ -19,8 +24,17 @@ height = 1.8
 radius = 0.5
 
 [node name="Player" type="KinematicBody"]
+collision_layer = 2
+collision_mask = 3
 script = ExtResource( 1 )
 blocks_texture = SubResource( 3 )
+
+[node name="NameLabel" type="Label3D" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0 )
+pixel_size = 0.002
+billboard = 1
+no_depth_test = true
+font = SubResource( 4 )
 
 [node name="MeshInstance" type="MeshInstance" parent="."]
 transform = Transform( 1, 0, 0, 0, -1.62921e-07, -1, 0, 1, -1.62921e-07, 0, 0, 0 )
@@ -37,12 +51,12 @@ cast_to = Vector3( 0, 0, -2 )
 [node name="CameraBase" type="Spatial" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.85, 0 )
 
-[node name="Camera" type="Camera" parent="CameraBase"]
-far = 500.0
-
-[node name="Headlamp" type="SpotLight" parent="CameraBase/Camera"]
+[node name="Headlamp" type="SpotLight" parent="CameraBase"]
 light_energy = 0.0
 spot_range = 50.0
+
+[node name="Camera" type="Camera" parent="CameraBase"]
+far = 500.0
 
 [node name="RayCast" type="RayCast" parent="CameraBase/Camera"]
 enabled = true

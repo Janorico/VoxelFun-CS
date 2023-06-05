@@ -5,7 +5,7 @@ var height_noise = OpenSimplexNoise.new()
 onready var Chunk = load("res://scripts/game/Chunk.gd")
 
 # Saving variables
-var world_path: String
+var world_path
 var world_data = {}
 
 # Thread variables No reason to declare these on startup just do it up here
@@ -28,23 +28,30 @@ const load_radius = 5
 var current_load_radius = 0
 
 
-func _init(path: String):
+func _init(path):
 	world_path = path
 
 
 func _ready():
 	var file = File.new()
-	if file.file_exists(world_path):
+	if world_path and file.file_exists(world_path):
 		file.open(world_path, File.READ)
 		var data = file.get_var()
 		file.close()
 		if typeof(data) == TYPE_DICTIONARY:
 			world_data = data
+
+
+func start_generating():
+	if thread.is_active():
+		return
 	thread.start(self, "_thread_gen")
 	height_noise.period = 100
 
 
 func save_world():
+	if not world_path:
+		return
 	print("Saving world")
 	var file = File.new()
 	file.open(world_path, File.WRITE)
@@ -108,15 +115,30 @@ func update_player_pos(new_pos):
 	_new_chunk_pos = new_pos
 
 
-func change_block(cx, cz, bx, by, bz, t, update = true):
-	var c = _loaded_chunks[Vector2(cx, cz)]
-	if c._block_data[bx][by][bz].type != t:
-		if c._block_data[bx][by][bz].type == "Diamond":
-			Global.collect_diamond()
-		c._block_data[bx][by][bz].create(t)
-		world_data["%d,%d,%d,%d,%d" % [bx, by, bz, cx, cz]] = t
-		if update:
-			_update_chunk(cx, cz)
+func change_block(cx, cz, bx, by, bz, t, update = true, rpc = true):
+	world_data["%d,%d,%d,%d,%d" % [bx, by, bz, cx, cz]] = t
+	if get_tree().has_network_peer() and rpc:
+		rpc("change_block_remote", cx, cz, bx, by, bz, t, update)
+	var c_pos = Vector2(cx, cz)
+	if _loaded_chunks.has(c_pos):
+		var c = _loaded_chunks[c_pos]
+		if c._block_data[bx][by][bz].type != t:
+			if c._block_data[bx][by][bz].type == "Diamond":
+				Global.collect_diamond()
+			c._block_data[bx][by][bz].create(t)
+			if update:
+				_update_chunk(cx, cz)
+
+
+remote func change_block_remote(cx, cz, bx, by, bz, t, update = true):
+	world_data["%d,%d,%d,%d,%d" % [bx, by, bz, cx, cz]] = t
+	var c_pos = Vector2(cx, cz)
+	if _loaded_chunks.has(c_pos):
+		var c = _loaded_chunks[c_pos]
+		if c._block_data[bx][by][bz].type != t:
+			c._block_data[bx][by][bz].create(t)
+			if update:
+				_update_chunk(cx, cz)
 
 
 func _load_chunk(cx, cz):

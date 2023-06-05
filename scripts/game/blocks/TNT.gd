@@ -8,8 +8,13 @@ onready var animation_player: AnimationPlayer = $AnimationPlayer
 
 
 func _physics_process(_delta):
-	if not Input.is_action_just_released("ignite_tnt"):
-		return
+	if (not get_tree().has_network_peer() or is_network_master()) and Input.is_action_just_released("ignite_tnt"):
+		ignite()
+		if get_tree().has_network_peer():
+			rpc("ignite")
+
+
+remote func ignite():
 	animation_player.play("explode")
 	var changed_chunks: Array = []
 	for x in range(translation.x - 5, translation.x + 5):
@@ -23,6 +28,10 @@ func _physics_process(_delta):
 					changed_chunks.append(chunk)
 				# Calculate position on chunk
 				pos = pos - (chunk * chunk_size)
-				pw.change_block(chunk.x, chunk.z, pos.x, pos.y, pos.z, "Air", false)
+				pw.change_block(chunk.x, chunk.z, pos.x, pos.y, pos.z, "Air", false, false)
 	for c in changed_chunks:
 		pw._update_chunk(c.x, c.z)
+
+
+remote func queue_free():
+	.queue_free()

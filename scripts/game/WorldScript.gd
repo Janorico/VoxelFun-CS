@@ -1,10 +1,12 @@
 extends Spatial
 
-var initial_world_path: String = "user://worlds/default"
+const PLAYER = preload("res://scenes/game/player.tscn")
+var initial_world_path = "user://worlds/default"
 var initial_world_type = null
 onready var diamonds_label: Label = $DiamondsView/CenterContainer/Label
 var pw
-onready var player = $Player
+onready var players: Spatial = $Players
+onready var player: Player
 onready var block_outline = $BlockOutline
 
 var Chunk = load("res://scripts/game/Chunk.gd")
@@ -14,17 +16,42 @@ var chunk_pos = Vector2()
 
 
 func _ready():
+	# Load my player
+	player = load_player()
+	get_node("../PauseMenu").player = player
+	if get_tree().has_network_peer():
+		player.initialize(get_tree().get_network_unique_id(), Net.my_player)
+	var mrt = RemoteTransform.new()
+	mrt.translation = Vector3(0, 100, 0)
+	mrt.update_rotation = false
+	mrt.update_scale = false
+	mrt.remote_path = "../../../Map/MapContainer/MapViewport/Camera"
+	player.add_child(mrt)
+	# Setup diamonds display
 	update_diamonds_label()
 	# warning-ignore:return_value_discarded
 	Global.connect("diamond_collected", self, "update_diamonds_label")
+	# Connect network signals
+	# warning-ignore:return_value_discarded
+	get_tree().connect("server_disconnected", get_tree(), "change_scene", ["res://scenes/server_disonnected.tscn"])
+	# warning-ignore:return_value_discarded
+	Net.connect("player_registered", self, "_on_player_registered")
+	# warning-ignore:return_value_discarded
+	Net.connect("player_unregistered", self, "_on_player_unregistered")
+	# Create world
 	print("CREATING WORLD")
 	pw = ProcWorld.new(initial_world_path)
-	if initial_world_type != null:
-		pw.world_data["type"] = initial_world_type
+	if not get_tree().has_network_peer() or get_tree().is_network_server():
+		if initial_world_type != null:
+			pw.world_data["type"] = initial_world_type
+		pw.start_generating()
+		$ModalMessage.hide()
 	add_child(pw)
+	# Save and kill map loading on exit
 	# warning-ignore:return_value_discarded
 	self.connect("tree_exiting", self, "_on_tree_exiting")
 	
+	# Connect player
 	# warning-ignore:return_value_discarded
 	player.connect("place_block", self, "_on_player_place_block")
 	# warning-ignore:return_value_discarded
@@ -53,8 +80,32 @@ func _process(_delta):
 		Global.save()
 
 
+func load_player() -> Player:
+	var p = PLAYER.instance()
+	p.translation = Vector3(0, 50, 0)
+	players.add_child(p)
+	return p
+
+
 func update_diamonds_label():
 	diamonds_label.text = str(Global.diamonds)
+
+
+remote func receive_world(world: Dictionary):
+	pw.world_data = world
+	pw.start_generating()
+	$ModalMessage.hide()
+
+
+func _on_player_registered(id: int):
+	rpc_id(id, "receive_world", pw.world_data)
+	load_player().initialize(id, Net.other_players[id])
+
+
+func _on_player_unregistered(id: int):
+	var p = players.get_node_or_null(str(id))
+	if p:
+		p.queue_free()
 
 
 func _on_tree_exiting():
@@ -70,6 +121,8 @@ func _on_tree_exiting():
 func _on_player_destroy_block(pos, norm, collider):
 	if collider.is_in_group("extra_blocks"):
 		collider.queue_free()
+		if get_tree().has_network_peer():
+			collider.rpc("queue_free")
 	else:
 		# Take a half step into the block
 		pos -= norm * 0.5
@@ -103,11 +156,23 @@ func _on_player_place_block(pos, norm, t):
 		#pw.change_block(cx, cz, bx, by, bz, Chunk.block_types.keys()[t])
 		pw.call_deferred("change_block", cx, cz, bx, by, bz, Chunk.block_types.keys()[t])
 	else:
-		var block_instance: Spatial = Chunk.extra_blocks.values()[t - Chunk.block_types.size()]["Instance"].instance()
-		block_instance.chunk_size = Chunk.DIMENSION
-		block_instance.pw = pw
-		block_instance.translation = Vector3(((cx * Chunk.DIMENSION.x) + bx), by, ((cz * Chunk.DIMENSION.z) + bz))
-		add_child(block_instance)
+		var bpos = Vector3(((cx * Chunk.DIMENSION.x) + bx), by, ((cz * Chunk.DIMENSION.z) + bz))
+		var idx = t - Chunk.block_types.size()
+		var bname = "%d%d" % [get_tree().get_network_unique_id(), get_child_count()]
+		add_block_instance(bpos, idx, get_tree().get_network_unique_id(), bname)
+		if get_tree().has_network_peer():
+			rpc("add_block_instance", bpos, idx, get_tree().get_network_unique_id(), bname)
+
+
+remote func add_block_instance(bpos: Vector3, index: int, id: int, bname: String):
+	var block_instance: Spatial = Chunk.extra_blocks.values()[index]["Instance"].instance()
+	block_instance.set_network_master(id)
+	block_instance.chunk_size = Chunk.DIMENSION
+	block_instance.pw = pw
+	block_instance.translation = bpos
+	block_instance.name = bname
+	add_child(block_instance)
+
 
 func _on_player_highlight_block(pos, norm):
 	block_outline.visible = true
