@@ -1,6 +1,7 @@
 class_name Player
 extends KinematicBody
 
+onready var ceiling_detector: RayCast = $CeilingDetector
 onready var stair_detector: RayCast = $StairDetector
 onready var camera_base = $CameraBase
 onready var raycast = $CameraBase/Camera/RayCast
@@ -116,7 +117,7 @@ func _physics_process(delta):
 			
 			if Input.is_action_pressed("forward"):
 				direction -= camera_base_basis.z #forward is negative in Godot
-				if stair_detector.is_colliding() and is_on_floor() and not fly:
+				if stair_detector.is_colliding() and is_on_floor() and not ceiling_detector.is_colliding() and not fly:
 					velocity.y = jump_vel * power_multipler
 			if Input.is_action_pressed("backward"):
 				direction += camera_base_basis.z
@@ -163,6 +164,7 @@ func initialize(id: int, info: Dictionary):
 		if info.has("headlamp_energy"):
 			headlamp.light_energy = info["headlamp_energy"]
 		$NameLabel.text = info["name"]
+		ceiling_detector.queue_free()
 		stair_detector.queue_free()
 		$CameraBase/Camera.queue_free()
 	finished()
