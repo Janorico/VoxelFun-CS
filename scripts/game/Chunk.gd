@@ -122,8 +122,7 @@ func update():
 	
 	var mesh_instance = MeshInstance.new()
 	
-	# Collision Mesh instance
-	var cmesh_instance = MeshInstance.new()
+	var collision_shape = CollisionShape.new()
 	
 	st.begin(Mesh.PRIMITIVE_TRIANGLES)
 	cst.begin(Mesh.PRIMITIVE_TRIANGLES)
@@ -154,17 +153,14 @@ func update():
 	cst.generate_normals(false)
 	cst.commit(cmesh)
 	cst.clear()
-	cmesh_instance.set_mesh(cmesh)
-	# This is for collision only and so we do not need to see it (it causes issues with transparent blocks)
-	cmesh_instance.visible = false
+	collision_shape.shape = cmesh.create_trimesh_shape()
 	
 	# If it already has a mesh instance child, remove it
 	for child in get_children():
-		if child is MeshInstance:
+		if child is MeshInstance or child is CollisionShape:
 			child.queue_free()
 	add_child(mesh_instance)
-	add_child(cmesh_instance)
-	cmesh_instance.create_trimesh_collision()
+	add_child(collision_shape)
 
 
 func _create_block(check, x, y, z, no_collision):
