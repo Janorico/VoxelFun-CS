@@ -158,19 +158,23 @@ func _on_player_place_block(pos, norm, t):
 	else:
 		var bpos = Vector3(((cx * Chunk.DIMENSION.x) + bx), by, ((cz * Chunk.DIMENSION.z) + bz))
 		var idx = t - Chunk.block_types.size()
-		var bname = "%d%d" % [get_tree().get_network_unique_id(), get_child_count()]
-		add_block_instance(bpos, idx, get_tree().get_network_unique_id(), bname)
+		var bname = str(get_child_count())
+		var id = get_tree().get_network_unique_id() if get_tree().has_network_peer() else -1
+		if not id == -1:
+			bname += str(id)
+		add_block_instance(bpos, idx, id, bname)
 		if get_tree().has_network_peer():
-			rpc("add_block_instance", bpos, idx, get_tree().get_network_unique_id(), bname)
+			rpc("add_block_instance", bpos, idx, id, bname)
 
 
 remote func add_block_instance(bpos: Vector3, index: int, id: int, bname: String):
 	var block_instance: Spatial = Chunk.extra_blocks.values()[index]["Instance"].instance()
-	block_instance.set_network_master(id)
+	if get_tree().has_network_peer():
+		block_instance.set_network_master(id)
 	block_instance.chunk_size = Chunk.DIMENSION
 	block_instance.pw = pw
 	block_instance.translation = bpos
-	block_instance.name = bname
+	block_instance.name = "ExtraBlock%s" % bname
 	add_child(block_instance)
 
 
