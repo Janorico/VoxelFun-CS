@@ -148,10 +148,12 @@ func update():
 	st.generate_normals(false)
 	st.set_material(mat)
 	st.commit(mesh)
+	st.clear()
 	mesh_instance.set_mesh(mesh)
 	
 	cst.generate_normals(false)
 	cst.commit(cmesh)
+	cst.clear()
 	cmesh_instance.set_mesh(cmesh)
 	# This is for collision only and so we do not need to see it (it causes issues with transparent blocks)
 	cmesh_instance.visible = false
