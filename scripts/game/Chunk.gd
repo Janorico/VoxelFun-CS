@@ -10,6 +10,8 @@ const Gen_Height = 50
 # NOTE: this is applied after the gen height calculation, that means it will affect the final output of Gen_Height
 const Block_offset = 1
 
+const SHEEP = preload("res://scenes/game/creatures/sheep.tscn")
+
 var mat = preload("res://assets/TextureAtlasMaterial.tres")
 var rng = RandomNumberGenerator.new()
 # Make this load from a file
@@ -112,6 +114,11 @@ func generate(w, cx, cz):
 				_set_block_data(x, y, z, b)
 	
 	generator.generate_details(self, rng, ground_height)
+
+	if rng.randf() > 0.8:
+		var sheep = SHEEP.instance()
+		sheep.translation = Vector3((DIMENSION.x / 2), (DIMENSION.y * 2), (DIMENSION.z / 2))
+		add_child(sheep)
 
 
 func update():
