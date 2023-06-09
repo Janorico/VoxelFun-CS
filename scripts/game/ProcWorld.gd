@@ -33,6 +33,7 @@ func _init(path):
 
 
 func _ready():
+	name = "ProcWorld"
 	var file = File.new()
 	if world_path and file.file_exists(world_path):
 		file.open(world_path, File.READ)
@@ -145,6 +146,7 @@ func _load_chunk(cx, cz):
 	var c_pos = Vector2(cx, cz)
 	if not _loaded_chunks.has(c_pos):
 		var c = Chunk.new(world_data.get("type", "Forest"))
+		c.name = "ChunkX%dZ%d" % [cx, cz]
 		c.generate(self, cx, cz)
 		c.update()
 		add_child(c)
