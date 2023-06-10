@@ -26,7 +26,7 @@ _global_script_class_icons={
 
 [application]
 
-config/name="VoxelFun"
+config/name="VoxelFunCS"
 run/main_scene="res://scenes/startup.tscn"
 config/use_custom_user_dir=true
 config/custom_user_dir_name="JanoSemi/VoxelFun"
@@ -164,6 +164,10 @@ ignite_tnt={
 
 file_logging/log_path="user://logs/voxelfun.log"
 file_logging/max_log_files=20
+
+[mono]
+
+project/assembly_name="VoxelFunCS"
 
 [rendering]
 
